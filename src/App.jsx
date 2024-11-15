@@ -1,9 +1,29 @@
-// import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
+import axios from 'axios';
+// import apiKey from './assets/apiKey.jsx';
 
 function App() {
-  // const [count, setCount] = useState(0)
-  const lorem = "Lorem ipsum odor amet, consectetuer adipiscing elit. Nunc sed dolor laoreet litora hac sollicitudin etiam. Mus orci curae odio ante sit egestas mattis per lobortis. Lobortis sapien parturient blandit; facilisi a felis consequat facilisis. Blandit auctor nisl felis hendrerit cubilia. Dui accumsan commodo magnis per elit mattis sollicitudin. Faucibus fames at nisi hendrerit magna. Enim posuere vel turpis nunc venenatis donec ridiculus convallis molestie. Turpis dis inceptos ultricies imperdiet integer lacus dolor."
+  const [quote, setQuote] = useState(null)
+
+  useEffect(() => {
+    axios(
+      {
+        method: 'get',
+        url: 'https://animechan.io/api/v1/quotes/random',
+        headers: {
+          'x-api-key': 'KEY GOES HERE'
+        }
+      }).then(function (response) {
+      setQuote(response.data.content);
+
+    }).catch(
+      function(error) {
+        console.log(error);
+        setQuote(`${error}`)
+      }
+    )
+  }, [])
 
   return (
     <>
@@ -23,7 +43,12 @@ function App() {
       </div>
       <div id="quote-container">
         <div className="quote">
-        &quot;{lorem}&quot;
+        &quot;{
+          function (){
+            let currQuote = quote || "Quote incoming...";
+            return currQuote;
+          }()
+        }&quot;
         </div>
       </div>
       <div id="guess-container">
