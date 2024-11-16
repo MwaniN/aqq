@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import axios from 'axios';
-// import apiKey from './assets/apiKey.jsx';
 
 function App() {
   const [quote, setQuote] = useState(null)
@@ -12,15 +11,30 @@ function App() {
         method: 'get',
         url: 'https://animechan.io/api/v1/quotes/random',
         headers: {
-          'x-api-key': 'KEY GOES HERE'
+          'x-api-key': `${import.meta.env.VITE_API_KEY}`
         }
       }).then(function (response) {
+        console.log(response.data)
       setQuote(response.data.content);
 
     }).catch(
       function(error) {
-        console.log(error);
-        setQuote(`${error}`)
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
       }
     )
   }, [])
