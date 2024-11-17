@@ -9,9 +9,10 @@ function App() {
   useEffect(() => {
     axios.get(`http://localhost:3000/randomQuote`
       ).then(function (response) {
-        console.log(response)
-      setQuote(response.content);
-      setCorrectAnime(response.anime.name);
+        console.log(response.data, " This is response.data")
+        console.log(response.data.anime, " This is response.anime")
+      setQuote(response.data.content);
+      setCorrectAnime(response.data.anime.name);
 
     }).catch(
       function(error) {
