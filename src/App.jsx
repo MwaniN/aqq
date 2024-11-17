@@ -4,18 +4,14 @@ import axios from 'axios';
 
 function App() {
   const [quote, setQuote] = useState(null)
+  const [correctAnime, setCorrectAnime] = useState(null)
 
   useEffect(() => {
-    axios(
-      {
-        method: 'get',
-        url: 'https://animechan.io/api/v1/quotes/random',
-        headers: {
-          'x-api-key': `${import.meta.env.VITE_API_KEY}`
-        }
-      }).then(function (response) {
-        console.log(response.data)
-      setQuote(response.data.content);
+    axios.get(`http://localhost:3000/randomQuote`
+      ).then(function (response) {
+        console.log(response)
+      setQuote(response.content);
+      setCorrectAnime(response.anime.name);
 
     }).catch(
       function(error) {
@@ -60,7 +56,7 @@ function App() {
         &quot;{
           function (){
             let currQuote = quote || "Quote incoming...";
-            return currQuote;
+            return `${currQuote} - ${correctAnime}`;
           }()
         }&quot;
         </div>
