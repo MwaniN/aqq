@@ -1,10 +1,32 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import axios from 'axios';
+import Choices from './Choices.jsx'
+
+function shuffle(array) {
+  let currentIndex = array.length;
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+
+    // Pick a remaining element...
+    let randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+  return array
+}
+
+
 
 function App() {
-  const [quote, setQuote] = useState(null)
-  const [correctAnime, setCorrectAnime] = useState(null)
+
+  const [quote, setQuote] = useState(null);
+  const [correctAnime, setCorrectAnime] = useState(null);
+  const [choices, setChoices] = useState(null);
 
   useEffect(() => {
     axios.get(`http://localhost:3000/randomQuote`
@@ -13,6 +35,34 @@ function App() {
         console.log(response.data.anime, " This is response.anime")
       setQuote(response.data.content);
       setCorrectAnime(response.data.anime.name);
+
+      axios.get(`http://localhost:3000/random3Anime`
+      ).then( function (response) {
+        console.log(response, ' This is the response from the random3Anime call')
+        let choiceArray = response.data
+        setChoices(choiceArray)
+
+      }
+      ).catch(
+        function(error) {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+          }
+          console.log(error.config);
+        }
+      )
 
     }).catch(
       function(error) {
@@ -57,7 +107,7 @@ function App() {
         &quot;{
           function (){
             let currQuote = quote || "Quote incoming...";
-            return `${currQuote} - ${correctAnime}`;
+            return `${currQuote}`;
           }()
         }&quot;
         </div>
@@ -65,12 +115,15 @@ function App() {
       <div id="guess-container">
         <div className="prompt">What anime is this from?</div>
         <div className="choices-container">
-            <div className="choice">Choice 1</div>
-            <div className="choice">Choice 2</div>
-            <div className="choice">Choice 3</div>
-            <div className="choice">Choice 4</div>
-            <div className="choice">Choice 5</div>
-            <div className="choice">Choice 6</div>
+            {function (){
+              let animeArray = choices;
+              animeArray.push(correctAnime);
+              animeArray = shuffle(animeArray);
+
+              return animeArray.map(function (anime) {
+                return <Choices animeName={anime} key={animeArray.indexof(anime)} />
+              })
+            }()}
         </div>
         <button type="submit">Enter</button>
 
