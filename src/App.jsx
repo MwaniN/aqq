@@ -24,10 +24,13 @@ function shuffle(array) {
 
 function App() {
 
+  console.log("App started")
+
   const [quote, setQuote] = useState(null);
   const [correctAnime, setCorrectAnime] = useState(null);
   const [choices, setChoices] = useState(null);
 
+  console.log("UseEffect started")
   useEffect(() => {
     axios.get(`http://localhost:3000/randomQuote`
       ).then(function (response) {
@@ -41,6 +44,7 @@ function App() {
         console.log(response, ' This is the response from the random3Anime call')
         let choiceArray = response.data
         setChoices(choiceArray)
+        console.log(choiceArray, " This is the initial choiceArray")
 
       }
       ).catch(
@@ -116,13 +120,15 @@ function App() {
         <div className="prompt">What anime is this from?</div>
         <div className="choices-container">
             {function (){
-              let animeArray = choices;
-              animeArray.push(correctAnime);
-              animeArray = shuffle(animeArray);
+              if (choices) {
+                let animeArray = choices;
+                animeArray.push(correctAnime);
+                animeArray = shuffle(animeArray);
 
-              return animeArray.map(function (anime) {
-                return <Choices animeName={anime} key={animeArray.indexof(anime)} />
+                return animeArray.map(function (anime) {
+                  return <Choices animeName={anime} key={animeArray.indexOf(anime)} />
               })
+            }
             }()}
         </div>
         <button type="submit">Enter</button>
