@@ -24,14 +24,13 @@ function shuffle(array) {
 
 function App() {
 
-  console.log("App started")
-
+  // define the hooks
   const [quote, setQuote] = useState(null);
   const [correctAnime, setCorrectAnime] = useState(null);
   const [choices, setChoices] = useState(null);
 
-  console.log("UseEffect started")
   useEffect(() => {
+    // retrive the first anime quote
     axios.get(`http://localhost:3000/randomQuote`
       ).then(function (response) {
         console.log(response.data, " This is response.data")
@@ -124,8 +123,9 @@ function App() {
                 let animeArray = choices;
                 animeArray.push(correctAnime);
                 animeArray = shuffle(animeArray);
+                console.log(animeArray, " this is the final choice array w/ the correct name")
 
-                return animeArray.map(function (anime) {
+                animeArray.map(function (anime) {
                   return <Choices animeName={anime} key={animeArray.indexOf(anime)} />
               })
             }
