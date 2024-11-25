@@ -119,6 +119,7 @@ function App() {
             {function (){
               if (choices) {
                 let animeArray = choices.slice();
+                console.log("This is correctAnime", correctAnime, " BTW THIS SHOULD ONLY RUN ONCE")
                 animeArray.push(correctAnime);
                 animeArray = shuffle(animeArray);
                 console.log(animeArray, " this is the final choice array w/ the correct name")
