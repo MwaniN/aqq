@@ -41,10 +41,8 @@ function App() {
       axios.get(`http://localhost:3000/random3Anime`
       ).then( function (response) {
         console.log(response, ' This is the response from the random3Anime call')
-        let choiceArray = response.data
-        setChoices(choiceArray)
-        console.log(choiceArray, " This is the initial choiceArray")
-
+        setChoices(response.data)
+        console.log(choices, " This is the initial choices state Array")
       }
       ).catch(
         function(error) {
@@ -120,7 +118,7 @@ function App() {
         <div className="choices-container">
             {function (){
               if (choices) {
-                let animeArray = choices;
+                let animeArray = choices.slice();
                 animeArray.push(correctAnime);
                 animeArray = shuffle(animeArray);
                 console.log(animeArray, " this is the final choice array w/ the correct name")
