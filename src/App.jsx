@@ -3,20 +3,14 @@ import './App.css'
 import axios from 'axios';
 import Choices from './Choices.jsx'
 
-function shuffle(array) {
-  let currentIndex = array.length;
+function shuffle(arr) {
+  let array = arr;
 
-  // While there remain elements to shuffle...
-  while (currentIndex != 0) {
+    for (let i = array.length - 1; i >= 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
 
-    // Pick a remaining element...
-    let randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex], array[currentIndex]];
-  }
   return array
 }
 
@@ -120,7 +114,7 @@ function App() {
               if (choices) {
                 let animeArray = choices.slice();
                 console.log("This is correctAnime", correctAnime, " BTW THIS SHOULD ONLY RUN ONCE")
-                animeArray.push(correctAnime);
+                animeArray.unshift(correctAnime);
                 animeArray = shuffle(animeArray);
                 console.log(animeArray, " this is the final choice array w/ the correct name")
 
