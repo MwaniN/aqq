@@ -42,7 +42,7 @@ function App() {
       ).then( function (response) {
         console.log(response, ' This is the response from the random3Anime call')
         setChoices(response.data)
-        console.log(choices, " This is the initial choices state Array")
+        // console.log(choices, " This is the initial choices state Array")
       }
       ).catch(
         function(error) {
