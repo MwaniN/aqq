@@ -118,9 +118,12 @@ function App() {
                 animeArray = shuffle(animeArray);
                 console.log(animeArray, " this is the final choice array w/ the correct name")
 
-                animeArray.map(function (anime) {
+                let animeChoices = animeArray.map(function (anime) {
                   return <Choices animeName={anime} key={animeArray.indexOf(anime)} />
               })
+              console.log(animeChoices, " These are the animeChoices trying to render")
+
+              return animeChoices;
             }
             }()}
         </div>

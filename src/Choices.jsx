@@ -1,5 +1,5 @@
 
-export default function Choices (animeName) {
+export default function Choices ({animeName}) {
 
 
   return <div className={"choices"}>
