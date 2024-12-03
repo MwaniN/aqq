@@ -22,6 +22,8 @@ function App() {
   const [quote, setQuote] = useState(null);
   const [correctAnime, setCorrectAnime] = useState(null);
   const [choices, setChoices] = useState(null);
+  const [currQuoteNum, setNum] = useState(1);
+  const [currScore, setScore] = useState(0);
 
   useEffect(() => {
     // retrive the first anime quote
@@ -91,10 +93,10 @@ function App() {
       </header>
       <div id="hud">
         <div className="hud-item">
-          Quote 1/10
+          Quote {currQuoteNum}/10
         </div>
         <div className="hud-item">
-          Score: 0
+          Score: {currScore}
         </div>
       </div>
       <div id="quote-container">
