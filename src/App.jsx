@@ -129,7 +129,7 @@ function App() {
             }
             }()}
         </div>
-        <button type="submit">Enter</button>
+        <button type="button">Submit Selection</button>
 
       </div>
     </>
