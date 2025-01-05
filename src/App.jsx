@@ -14,6 +14,9 @@ function shuffle(arr) {
   return array
 }
 
+function handleClick() {
+  alert('You clicked me!');
+}
 
 
 function App() {
@@ -116,11 +119,11 @@ function App() {
               if (choices) {
                 let animeArray = choices.slice();
                 console.log("This is correctAnime", correctAnime)
-                animeArray.unshift(correctAnime);
+                animeArray.push(correctAnime);
                 animeArray = shuffle(animeArray);
 
                 let animeChoices = animeArray.map(function (anime) {
-                  return <Choices animeName={anime} key={animeArray.indexOf(anime)} />
+                  return <Choices animeName={anime} key={animeArray.indexOf(anime)} handleClick={handleClick}/>
               })
 
               return animeChoices;

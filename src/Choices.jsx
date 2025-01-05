@@ -1,8 +1,8 @@
 
-export default function Choices ({animeName}) {
+export default function Choices ({animeName, handleClick}) {
 
 
-  return <div className={"choices"}>
+  return <div className={"choices"} onClick={handleClick}>
     {animeName}
   </div>
 }
