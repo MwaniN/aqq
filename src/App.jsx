@@ -29,14 +29,14 @@ function App() {
     // retrive the first anime quote
     axios.get(`http://localhost:3000/randomQuote`
       ).then(function (response) {
-        console.log(response.data, " This is response.data")
-        console.log(response.data.anime, " This is response.anime")
+        // console.log(response.data, " This is response.data")
+        // console.log(response.data.anime, " This is response.anime")
       setQuote(response.data.content);
       setCorrectAnime(response.data.anime.name);
 
       axios.get(`http://localhost:3000/random3Anime`
       ).then( function (response) {
-        console.log(response, ' This is the response from the random3Anime call')
+        // console.log(response, ' This is the response from the random3Anime call')
         setChoices(response.data)
         // console.log(choices, " This is the initial choices state Array")
       }
@@ -115,15 +115,13 @@ function App() {
             {function (){
               if (choices) {
                 let animeArray = choices.slice();
-                console.log("This is correctAnime", correctAnime, " BTW THIS SHOULD ONLY RUN ONCE")
+                console.log("This is correctAnime", correctAnime)
                 animeArray.unshift(correctAnime);
                 animeArray = shuffle(animeArray);
-                console.log(animeArray, " this is the final choice array w/ the correct name")
 
                 let animeChoices = animeArray.map(function (anime) {
                   return <Choices animeName={anime} key={animeArray.indexOf(anime)} />
               })
-              console.log(animeChoices, " These are the animeChoices trying to render")
 
               return animeChoices;
             }
