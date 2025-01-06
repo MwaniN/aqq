@@ -22,7 +22,6 @@ function App() {
   const [choices, setChoices] = useState(null);
   const [currQuoteNum, setNum] = useState(1);
   const [currScore, setScore] = useState(0);
-  const ref = useRef(null)
 
   useEffect(() => {
     // retrive the first anime quote
@@ -82,9 +81,8 @@ function App() {
     )
   }, [])
 
-  function handleClick() {
-    console.log(ref.innerText || "Inner Text Not Set")
-    alert('You clicked me!');
+  function handleClick(animeName) {
+    alert(`You clicked ${animeName}!`);
 
   }
 
@@ -125,8 +123,7 @@ function App() {
                 animeArray = shuffle(animeArray);
 
                 let animeChoices = animeArray.map(function (anime) {
-                  return <Choices animeName={anime} key={animeArray.indexOf(anime)} handleClick={handleClick}
-                  ref={ref}/>
+                  return <Choices animeName={anime} key={animeArray.indexOf(anime)} handleClick={handleClick}/>
               })
 
               return animeChoices;
