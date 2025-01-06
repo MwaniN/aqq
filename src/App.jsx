@@ -22,7 +22,7 @@ function App() {
   const [choices, setChoices] = useState(null);
   const [currQuoteNum, setNum] = useState(1);
   const [currScore, setScore] = useState(0);
-  const currentSelection = useRef(null)
+  const ref = useRef(null)
 
   useEffect(() => {
     // retrive the first anime quote
@@ -83,7 +83,7 @@ function App() {
   }, [])
 
   function handleClick() {
-    console.log(currentSelection.innerText || "Inner Text Not Set")
+    console.log(ref.innerText || "Inner Text Not Set")
     alert('You clicked me!');
 
   }
@@ -126,7 +126,7 @@ function App() {
 
                 let animeChoices = animeArray.map(function (anime) {
                   return <Choices animeName={anime} key={animeArray.indexOf(anime)} handleClick={handleClick}
-                  currentSelection={currentSelection}/>
+                  ref={ref}/>
               })
 
               return animeChoices;
