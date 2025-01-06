@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import axios from 'axios';
 import Choices from './Choices.jsx'
@@ -14,11 +14,6 @@ function shuffle(arr) {
   return array
 }
 
-function handleClick() {
-  alert('You clicked me!');
-}
-
-
 function App() {
 
   // define the hooks
@@ -27,6 +22,7 @@ function App() {
   const [choices, setChoices] = useState(null);
   const [currQuoteNum, setNum] = useState(1);
   const [currScore, setScore] = useState(0);
+  const currentSelection = useRef(null)
 
   useEffect(() => {
     // retrive the first anime quote
@@ -86,6 +82,12 @@ function App() {
     )
   }, [])
 
+  function handleClick() {
+    console.log(currentSelection.innerText || "Inner Text Not Set")
+    alert('You clicked me!');
+
+  }
+
   return (
     <>
       <header id="header">
@@ -123,7 +125,8 @@ function App() {
                 animeArray = shuffle(animeArray);
 
                 let animeChoices = animeArray.map(function (anime) {
-                  return <Choices animeName={anime} key={animeArray.indexOf(anime)} handleClick={handleClick}/>
+                  return <Choices animeName={anime} key={animeArray.indexOf(anime)} handleClick={handleClick}
+                  currentSelection={currentSelection}/>
               })
 
               return animeChoices;
