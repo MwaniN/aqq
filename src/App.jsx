@@ -23,6 +23,8 @@ function App() {
   const [currQuoteNum, setNum] = useState(1);
   const [currScore, setScore] = useState(0);
 
+  let currentChoice = null;
+
   useEffect(() => {
     // retrive the first anime quote
     axios.get(`http://localhost:3000/randomQuote`
@@ -82,8 +84,19 @@ function App() {
   }, [])
 
   function handleClick(animeName) {
-    alert(`You clicked ${animeName}!`);
+    currentChoice = animeName
+  }
 
+  function handleSubmit() {
+
+    if (currentChoice == null) {
+      alert(`Please select an anime first!`)
+    } else if (correctAnime === currentChoice) {
+        alert(`You are correct! It is ${currentChoice}!`);
+        currentChoice = null;
+      } else {
+        alert(`Wrong!`)
+      }
   }
 
   return (
@@ -130,7 +143,7 @@ function App() {
             }
             }()}
         </div>
-        <button type="button">Submit Selection</button>
+        <button type="button" onClick={handleSubmit}>Submit</button>
 
       </div>
     </>
