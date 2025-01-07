@@ -95,7 +95,7 @@ function App() {
         alert(`You are correct! It is ${currentChoice}!`);
         currentChoice = null;
       } else {
-        alert(`Wrong!`)
+        alert(`Wrong! It was ${currentChoice}`)
       }
   }
 
