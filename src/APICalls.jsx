@@ -1,10 +1,12 @@
 import axios from 'axios';
 
 
-export default function APICalls ({setQuote, setCorrectAnime, setChoices}) {
+export function APICalls (setQuote, setCorrectAnime, setChoices) {
+
+  console.log("We're in the function")
 
    // retrive the first anime quote
-   return axios.get(`http://localhost:3000/randomQuote`
+   axios.get(`http://localhost:3000/randomQuote`
    ).then(function (response) {
      // console.log(response.data, " This is response.data")
      // console.log(response.data.anime, " This is response.anime")
@@ -58,4 +60,6 @@ export default function APICalls ({setQuote, setCorrectAnime, setChoices}) {
      console.log(error.config);
    }
  )
+
+ return
 }

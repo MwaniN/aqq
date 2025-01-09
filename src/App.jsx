@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import Choices from './Choices.jsx'
-import APICalls from './APICalls.jsx'
+import {APICalls} from './APICalls.jsx'
 
 function shuffle(arr) {
   let array = arr;
@@ -26,7 +26,7 @@ function App() {
   let currentChoice = null;
 
   useEffect(() => {
-    <APICalls setQuote={setQuote} setCorrectAnime={setCorrectAnime} setChoices={setChoices}/>
+    APICalls(setQuote, setCorrectAnime, setChoices)
   }, [])
 
   function handleClick(animeName) {
@@ -42,7 +42,7 @@ function App() {
         alert(`You are correct! It is ${currentChoice}!`);
         currentChoice = null;
       } else {
-        alert(`Wrong! It was ${currentChoice}`)
+        alert(`Wrong! It was ${correctAnime}`)
       }
   }
 
