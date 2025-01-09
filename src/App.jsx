@@ -22,6 +22,7 @@ function App() {
   const [choices, setChoices] = useState(null);
   const [currQuoteNum, setNum] = useState(1);
   const [currScore, setScore] = useState(0);
+  const [totalQuotes, setQuoteNum] = useState(10);
 
   let currentChoice = null;
 
@@ -34,15 +35,44 @@ function App() {
     currentChoice = animeName
   }
 
+  function resetQuote() {
+    currentChoice = null;
+    setQuote(null);
+    setCorrectAnime(null)
+    setChoices(null)
+  }
+
   function handleSubmit() {
 
     if (currentChoice == null) {
       alert(`Please select an anime first!`)
     } else if (correctAnime === currentChoice) {
         alert(`You are correct! It is ${currentChoice}!`);
-        currentChoice = null;
+        resetQuote()
+        let newScore = currScore + 1
+        setScore(newScore)
+        // break the following section into a function since it repeats
+        if (currQuoteNum === totalQuotes) {
+          // insert game over screen
+          alert(`Congrats, you finished the game! Score: ${currScore}`)
+        } else {
+          let newQuoteNum = currQuoteNum + 1
+          setNum(newQuoteNum)
+          APICalls(setQuote, setCorrectAnime, setChoices)
+        }
       } else {
         alert(`Wrong! It was ${correctAnime}`)
+        resetQuote()
+        let newQuoteNum = currQuoteNum + 1
+        setNum(newQuoteNum)
+        if (currQuoteNum === totalQuotes) {
+          // insert game over screen
+          alert(`Congrats, you finished the game! Score: ${currScore}`)
+        } else {
+          let newQuoteNum = currQuoteNum + 1
+          setNum(newQuoteNum)
+          APICalls(setQuote, setCorrectAnime, setChoices)
+        }
       }
   }
 
@@ -56,7 +86,7 @@ function App() {
       </header>
       <div id="hud">
         <div className="hud-item">
-          Quote {currQuoteNum}/10
+          Quote {currQuoteNum}/{totalQuotes}
         </div>
         <div className="hud-item">
           Score: {currScore}
