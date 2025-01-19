@@ -22,6 +22,7 @@ function App() {
   const [choices, setChoices] = useState(null);
   const [currQuoteNum, setNum] = useState(1);
   const [currScore, setScore] = useState(0);
+  // this will allow them to do a longer quiz, 10 - 50 and so on
   const [totalQuotes, setQuoteNum] = useState(10);
 
   let currentChoice = null;
@@ -43,6 +44,7 @@ function App() {
   }
 
   function handleSubmit() {
+    // use ResultScreen in the future
 
     if (currentChoice == null) {
       alert(`Please select an anime first!`)

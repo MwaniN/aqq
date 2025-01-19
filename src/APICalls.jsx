@@ -3,8 +3,6 @@ import axios from 'axios';
 
 export function APICalls (setQuote, setCorrectAnime, setChoices) {
 
-  console.log("We're in the function")
-
    // retrive the first anime quote
    axios.get(`http://localhost:3000/randomQuote`
    ).then(function (response) {
