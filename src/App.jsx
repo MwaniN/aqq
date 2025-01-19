@@ -98,6 +98,7 @@ function App() {
         <div className="quote">
         &quot;{
           function (){
+            // can add loading icons in the future
             let currQuote = quote || "Quote incoming...";
             return `${currQuote}`;
           }()
@@ -105,7 +106,13 @@ function App() {
         </div>
       </div>
       <div id="guess-container">
-        <div className="prompt">What anime is this from?</div>
+        {function (){
+          if (choices && quote) {
+            return <div className="prompt">What anime is this from?</div>
+          } else if (quote && !choices) {
+            return "Choices incoming..."
+          }
+        }()}
         <div className="choices-container">
             {function (){
               if (choices) {
