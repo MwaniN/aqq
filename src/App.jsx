@@ -44,7 +44,6 @@ function App() {
   }
 
   function handleSubmit() {
-    // use ResultScreen in the future
 
     if (currentChoice == null) {
       alert(`Please select an anime first!`)
@@ -122,7 +121,7 @@ function App() {
                 animeArray = shuffle(animeArray);
 
                 let animeChoices = animeArray.map(function (anime) {
-                  return <Choices animeName={anime} key={animeArray.indexOf(anime)} handleClick={handleClick}/>
+                  return <Choices animeName={anime} key={animeArray.indexOf(anime)} tabIndex={animeArray.indexOf(anime)} handleClick={handleClick}/>
               })
 
               return animeChoices;

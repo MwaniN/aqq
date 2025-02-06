@@ -47,10 +47,20 @@
 
 .choices {
   display: flex;
+  align-self: center;
+  justify-content: flex-start;
+  margin: .2rem;
 }
 
 .choices:hover {
   color: aqua;
+}
+
+.choices:focus {
+  background-color: whitesmoke;
+  color: aqua;
+  border: teal;
+  border: 1px;
 }
 
 #title {
