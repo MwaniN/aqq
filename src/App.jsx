@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import Choices from './Choices.jsx'
 import {APICalls} from './APICalls.jsx'
+import ResultScreen from './ResultScreen.jsx'
 
 function shuffle(arr) {
   let array = arr;
@@ -24,6 +25,7 @@ function App() {
   const [currScore, setScore] = useState(0);
   // this will allow them to do a longer quiz, 10 - 50 and so on
   const [totalQuotes, setQuoteNum] = useState(10);
+  const [submissionMade, setSubmissionMade] = useState(false);
 
   let currentChoice = null;
 
@@ -41,6 +43,7 @@ function App() {
     setQuote(null);
     setCorrectAnime(null)
     setChoices(null)
+    setSubmissionMade(false)
   }
 
   function handleSubmit() {
@@ -110,6 +113,9 @@ function App() {
             return <div className="prompt">What anime is this from?</div>
           } else if (quote && !choices) {
             return "Choices incoming..."
+          } else if(submissionMade) {
+            // update with choice options
+            return <ResultScreen />
           }
         }()}
         <div className="choices-container">
