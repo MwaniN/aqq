@@ -109,18 +109,18 @@ function App() {
       </div>
       <div id="guess-container">
         {function (){
-          if (choices && quote) {
+
+          if(submissionMade) {
+            return <ResultScreen animeChoice={currentChoice} correctAnime={correctAnime} resetQuote={resetQuote}/>
+          } else if (choices && quote) {
             return <div className="prompt">What anime is this from?</div>
           } else if (quote && !choices) {
             return "Choices incoming..."
-          } else if(submissionMade) {
-            // update with choice options
-            return <ResultScreen />
           }
         }()}
         <div className="choices-container">
             {function (){
-              if (choices) {
+              if (choices && !submissionMade) {
                 let animeArray = choices.slice();
                 console.log("This is correctAnime", correctAnime)
                 animeArray.push(correctAnime);
@@ -134,7 +134,13 @@ function App() {
             }
             }()}
         </div>
-        <button type="button" onClick={handleSubmit}>Submit</button>
+        {
+          function (){
+            if (choices && !submissionMade){
+              return <button type="button" onClick={handleSubmit}>Submit</button>
+            }
+          }()
+        }
 
       </div>
     </>
