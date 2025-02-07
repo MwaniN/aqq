@@ -1,6 +1,6 @@
 // include option to save quote to their favorites in the future
 
-export default function Result ({animeChoice, correctAnime, resetQuote}) {
+export default function Result ({animeChoice, correctAnime, handleNextButton}) {
 
   // show a different screen depending on if correct is false or not
   // have a button that moves on to the next quote
@@ -14,16 +14,33 @@ export default function Result ({animeChoice, correctAnime, resetQuote}) {
 
   // use resetQuote when the button to choose next is hit
 
+  // game over screen can go here too
+
+  let isRight = false;
+
+  if (animeChoice === correctAnime) {
+    isRight = true;
+  }
+
   return <div>
     {
       function(){
-        if (animeChoice === correctAnime){
+        if (isRight){
           return `Correct! You chose ${animeChoice} and the answer was ${correctAnime}`
         } else {
           return `Incorrect! You chose ${animeChoice} and the answer was ${correctAnime}`
         }
       }()
     }
-    <button type="button">Next</button>
+    {
+      function (){
+        if (isRight) {
+          return <button type="button" onClick={handleNextButton(true)}>Next</button>
+
+        } else {
+          return <button type="button" onClick={handleNextButton(false)}>Next</button>
+        }
+      }()
+    }
   </div>
 }

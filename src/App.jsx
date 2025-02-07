@@ -26,6 +26,7 @@ function App() {
   // this will allow them to do a longer quiz, 10 - 50 and so on
   const [totalQuotes, setQuoteNum] = useState(10);
   const [submissionMade, setSubmissionMade] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
 
   let currentChoice = null;
 
@@ -46,38 +47,46 @@ function App() {
     setSubmissionMade(false)
   }
 
+  function advanceQuote () {
+    if (currQuoteNum === totalQuotes) {
+      setGameOver(true)
+      console.log("this should start the game over screen")
+    } else {
+      let newQuoteNum = currQuoteNum + 1
+      setNum(newQuoteNum)
+      APICalls(setQuote, setCorrectAnime, setChoices)
+    }
+  }
+
+  function rightAnswer() {
+        let newScore = currScore + 1
+        setScore(newScore)
+        resetQuote()
+        advanceQuote()
+  }
+
+  function wrongAnswer() {
+    resetQuote()
+    advanceQuote()
+  }
+
+  function handleNextButton(answer) {
+
+    if (answer) {
+      rightAnswer()
+    } else {
+      wrongAnswer()
+    }
+
+  }
+
   function handleSubmit() {
 
     if (currentChoice == null) {
       alert(`Please select an anime first!`)
-    } else if (correctAnime === currentChoice) {
-        alert(`You are correct! It is ${currentChoice}!`);
-        resetQuote()
-        let newScore = currScore + 1
-        setScore(newScore)
-        // break the following section into a function since it repeats
-        if (currQuoteNum === totalQuotes) {
-          // insert game over screen
-          alert(`Congrats, you finished the game! Score: ${currScore}`)
-        } else {
-          let newQuoteNum = currQuoteNum + 1
-          setNum(newQuoteNum)
-          APICalls(setQuote, setCorrectAnime, setChoices)
-        }
-      } else {
-        alert(`Wrong! It was ${correctAnime}`)
-        resetQuote()
-        let newQuoteNum = currQuoteNum + 1
-        setNum(newQuoteNum)
-        if (currQuoteNum === totalQuotes) {
-          // insert game over screen
-          alert(`Congrats, you finished the game! Score: ${currScore}`)
-        } else {
-          let newQuoteNum = currQuoteNum + 1
-          setNum(newQuoteNum)
-          APICalls(setQuote, setCorrectAnime, setChoices)
-        }
-      }
+    } else {
+      setSubmissionMade(true)
+    }
   }
 
   return (
@@ -111,7 +120,7 @@ function App() {
         {function (){
 
           if(submissionMade) {
-            return <ResultScreen animeChoice={currentChoice} correctAnime={correctAnime} resetQuote={resetQuote}/>
+            return <ResultScreen animeChoice={currentChoice} correctAnime={correctAnime} handleNextButton={handleNextButton}/>
           } else if (choices && quote) {
             return <div className="prompt">What anime is this from?</div>
           } else if (quote && !choices) {
