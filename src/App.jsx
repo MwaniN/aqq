@@ -28,6 +28,7 @@ function App() {
   const [submissionMade, setSubmissionMade] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [finalChoice, setFinalChoice] = useState(null);
+  const [homeScreen, setHomeScreen] = useState(false);
 
   let currentChoice = null;
 
