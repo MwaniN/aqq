@@ -16,7 +16,7 @@ export default function Result ({animeChoice, correctAnime, handleNextButton}) {
 
   // game over screen can go here too
 
-  console.log(animeChoice, "This is animeChoice in the result screen")
+  // make score update immediately if it's correct
 
   let isRight = false;
 
@@ -28,9 +28,9 @@ export default function Result ({animeChoice, correctAnime, handleNextButton}) {
     {
       function(){
         if (isRight){
-          return `Correct! You chose ${animeChoice} and the answer was ${correctAnime}`
+          return `Correct! You chose ${animeChoice} and the quote was from ${correctAnime}`
         } else {
-          return `Incorrect! You chose ${animeChoice} and the answer was ${correctAnime}`
+          return `Wrong! You chose ${animeChoice} and the quote was from ${correctAnime}`
         }
       }()
     }

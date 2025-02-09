@@ -38,8 +38,6 @@ function App() {
   function handleClick(animeName) {
     // Update their current choice
     currentChoice = animeName
-
-    console.log(currentChoice, " this is currentChoice in the click handler to set current choice")
   }
 
   function resetQuote() {
@@ -84,8 +82,6 @@ function App() {
   }
 
   function handleSubmit() {
-
-    console.log(currentChoice, " this is current choice in the submit button")
 
     if (currentChoice == null) {
       alert(`Please select an anime first!`)
