@@ -27,6 +27,7 @@ function App() {
   const [totalQuotes, setQuoteNum] = useState(10);
   const [submissionMade, setSubmissionMade] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+  const [finalChoice, setFinalChoice] = useState(null);
 
   let currentChoice = null;
 
@@ -37,10 +38,12 @@ function App() {
   function handleClick(animeName) {
     // Update their current choice
     currentChoice = animeName
+
+    console.log(currentChoice, " this is currentChoice in the click handler to set current choice")
   }
 
   function resetQuote() {
-    currentChoice = null;
+    currentChoice = null
     setQuote(null);
     setCorrectAnime(null)
     setChoices(null)
@@ -82,9 +85,12 @@ function App() {
 
   function handleSubmit() {
 
+    console.log(currentChoice, " this is current choice in the submit button")
+
     if (currentChoice == null) {
       alert(`Please select an anime first!`)
     } else {
+      setFinalChoice(currentChoice)
       setSubmissionMade(true)
     }
   }
@@ -120,7 +126,7 @@ function App() {
         {function (){
 
           if(submissionMade) {
-            return <ResultScreen animeChoice={currentChoice} correctAnime={correctAnime} handleNextButton={handleNextButton}/>
+            return <ResultScreen animeChoice={finalChoice} correctAnime={correctAnime} handleNextButton={handleNextButton}/>
           } else if (choices && quote) {
             return <div className="prompt">What anime is this from?</div>
           } else if (quote && !choices) {

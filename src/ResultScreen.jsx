@@ -16,6 +16,8 @@ export default function Result ({animeChoice, correctAnime, handleNextButton}) {
 
   // game over screen can go here too
 
+  console.log(animeChoice, "This is animeChoice in the result screen")
+
   let isRight = false;
 
   if (animeChoice === correctAnime) {
