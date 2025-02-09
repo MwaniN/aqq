@@ -35,10 +35,10 @@ export default function Result ({animeChoice, correctAnime, handleNextButton}) {
     {
       function (){
         if (isRight) {
-          return <button type="button" onClick={handleNextButton(true)}>Next</button>
+          return <button type="button" onClick={() => handleNextButton(true)}>Next</button>
 
         } else {
-          return <button type="button" onClick={handleNextButton(false)}>Next</button>
+          return <button type="button" onClick={() => handleNextButton(false)}>Next</button>
         }
       }()
     }
