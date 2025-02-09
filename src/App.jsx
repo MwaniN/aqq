@@ -59,26 +59,9 @@ function App() {
     }
   }
 
-  function rightAnswer() {
-        let newScore = currScore + 1
-        setScore(newScore)
-        resetQuote()
-        advanceQuote()
-  }
-
-  function wrongAnswer() {
+  function handleNextButton() {
     resetQuote()
     advanceQuote()
-  }
-
-  function handleNextButton(answer) {
-
-    if (answer) {
-      rightAnswer()
-    } else {
-      wrongAnswer()
-    }
-
   }
 
   function handleSubmit() {
@@ -87,6 +70,11 @@ function App() {
       alert(`Please select an anime first!`)
     } else {
       setFinalChoice(currentChoice)
+      // update the score before rendering the results
+      if (currentChoice === correctAnime) {
+        let newScore = currScore + 1
+        setScore(newScore)
+      }
       setSubmissionMade(true)
     }
   }
