@@ -3,7 +3,7 @@ import {Link} from 'react-router'
 export default function HomeScreen({setQuoteNum}) {
 
   return <>
-  <div>Choose your game length!</div>
+  <div>Choose your game length</div>
   <div>Short</div>
   <Link to="/Quiz"><button onClick={() => setQuoteNum(5)}>5</button></Link>
   <div>Medium</div>
