@@ -2,8 +2,8 @@
 export default function HomeScreen() {
 
   return <>
-  <div>How long of a game do you want to play?</div>
-  <div>Short</div>
+  <div>Choose your game length!</div>
+  <div>Quick</div>
   <button>5</button>
   <div>Medium</div>
   <button>10</button>
