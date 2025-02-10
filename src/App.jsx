@@ -6,7 +6,7 @@ import Quiz from './Quiz.jsx'
 
 function App() {
 
-  const [totalQuotes, setQuoteNum] = useState(10);
+  const [totalQuotes, setQuoteNum] = useState(null);
 
 
   return (
