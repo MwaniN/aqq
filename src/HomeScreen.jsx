@@ -1,5 +1,5 @@
 
-export default function HomeScreen({}) {
+export default function HomeScreen() {
 
   return <>
   <div>How long of a game do you want to play?</div>
