@@ -1,6 +1,6 @@
 import './App.css'
 import { useState } from 'react'
-import {Route, Routes} from 'react-router'
+import {Link, Route, Routes} from 'react-router'
 import HomeScreen from './HomeScreen.jsx'
 import Quiz from './Quiz.jsx'
 
@@ -12,6 +12,7 @@ function App() {
   return (
     <>
       <header id="header">
+      <Link to="/"><button>Home</button></Link>
         <div id="title">
         Anime Quote Quiz
         </div>
