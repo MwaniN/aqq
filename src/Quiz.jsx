@@ -4,7 +4,7 @@ import {APICalls} from './APICalls.jsx'
 import ResultScreen from './ResultScreen.jsx'
 
 
-export default function Quiz () {
+export default function Quiz ({totalQuotes}) {
 
   function shuffle(arr) {
     let array = arr;
@@ -24,7 +24,6 @@ export default function Quiz () {
   const [currQuoteNum, setNum] = useState(1);
   const [currScore, setScore] = useState(0);
   // this will allow them to do a longer quiz, 10 - 50 and so on
-  const [totalQuotes, setQuoteNum] = useState(10);
   const [submissionMade, setSubmissionMade] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [finalChoice, setFinalChoice] = useState(null);

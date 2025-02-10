@@ -11,6 +11,9 @@ export function APICalls (setQuote, setCorrectAnime, setChoices) {
    setQuote(response.data.content);
    setCorrectAnime(response.data.anime.name);
 
+   // update the following call to prevent duplicated names
+   // could be handled on the backend passing in the name retrieved in the first call
+
    axios.get(`http://localhost:3000/random4Anime`
    ).then( function (response) {
      // console.log(response, ' This is the response from the random3Anime call')

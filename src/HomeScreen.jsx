@@ -1,5 +1,5 @@
 
-export default function HomeScreen() {
+export default function HomeScreen({setQuoteNum}) {
 
   return <>
   <div>Choose your game length!</div>

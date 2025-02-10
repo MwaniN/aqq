@@ -1,9 +1,12 @@
 import './App.css'
+import { useState } from 'react'
 import {Route, Routes} from 'react-router'
 import HomeScreen from './HomeScreen.jsx'
 import Quiz from './Quiz.jsx'
 
 function App() {
+
+  const [totalQuotes, setQuoteNum] = useState(10);
 
 
   return (
@@ -14,8 +17,8 @@ function App() {
         </div>
       </header>
       <Routes>
-        <Route path='/' element={<HomeScreen />}/>
-        <Route path='/quiz' element={<Quiz />} />
+        <Route path='/' element={<HomeScreen setQuoteNum={setQuoteNum} />}/>
+        <Route path='/quiz' element={<Quiz totalQuotes={totalQuotes} setQuoteNum={setQuoteNum}/>} />
       </Routes>
     </>
   )
