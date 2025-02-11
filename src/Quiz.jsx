@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Choices from './Choices.jsx'
 import {APICalls} from './APICalls.jsx'
 import ResultScreen from './ResultScreen.jsx'
+import GameOver from './GameOver.jsx'
 
 
 export default function Quiz ({totalQuotes}) {
@@ -89,21 +90,27 @@ export default function Quiz ({totalQuotes}) {
         Score: {currScore}
       </div>
     </div>
-    <div id="quote-container">
-      <div className="quote">
-      &quot;{
-        function (){
-          // can add loading icons in the future
-          let currQuote = quote || "Quote incoming...";
-          return `${currQuote}`;
-        }()
-      }&quot;
+    {function(){
+      if (!gameOver) {
+        return <div id="quote-container">
+        <div className="quote">
+        &quot;{
+          function (){
+            // can add loading icons in the future
+            let currQuote = quote || "Quote incoming...";
+            return `${currQuote}`;
+          }()
+        }&quot;
+        </div>
       </div>
-    </div>
+      }
+    }()}
     <div id="guess-container">
       {function (){
 
-        if(submissionMade) {
+        if (gameOver) {
+          return <GameOver finalScore={currScore}/>
+        } else if(submissionMade && !gameOver) {
           return <ResultScreen animeChoice={finalChoice} correctAnime={correctAnime} handleNextButton={handleNextButton}/>
         } else if (choices && quote) {
           return <div className="prompt">What anime is this from?</div>
