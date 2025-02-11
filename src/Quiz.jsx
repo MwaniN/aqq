@@ -24,7 +24,6 @@ export default function Quiz ({totalQuotes}) {
   const [choices, setChoices] = useState(null);
   const [currQuoteNum, setNum] = useState(1);
   const [currScore, setScore] = useState(0);
-  // this will allow them to do a longer quiz, 10 - 50 and so on
   const [submissionMade, setSubmissionMade] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [finalChoice, setFinalChoice] = useState(null);
