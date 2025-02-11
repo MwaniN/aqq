@@ -34,6 +34,6 @@ export default function Result ({animeChoice, correctAnime, handleNextButton}) {
         }
       }()
     }
-    <button type="button" onClick={() => handleNextButton()}>Next</button>
+    <button type="button" className="advance-button" onClick={() => handleNextButton()}>Next</button>
   </div>
 }

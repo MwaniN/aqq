@@ -26,7 +26,7 @@ export default function GameOver({finalScore}) {
         }()
       }
     </div>
-    <Link to="/"><button>Return Home</button></Link>
+    <Link to="/"><button type="button" className="advance-button">Return Home</button></Link>
     </>
   )
 }

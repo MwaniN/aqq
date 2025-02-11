@@ -137,7 +137,7 @@ export default function Quiz ({totalQuotes}) {
       {
         function (){
           if (choices && !submissionMade){
-            return <button type="button" onClick={handleSubmit}>Submit</button>
+            return <button className="advance-button" type="button" onClick={handleSubmit}>Submit</button>
           }
         }()
       }
