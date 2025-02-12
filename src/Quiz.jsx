@@ -4,8 +4,10 @@ import {APICalls} from './APICalls.jsx'
 import ResultScreen from './ResultScreen.jsx'
 import GameOver from './GameOver.jsx'
 
-
 export default function Quiz ({totalQuotes}) {
+
+  // add logic to check for page refresh and take them
+  // back to the home screen
 
   function shuffle(arr) {
     let array = arr;
