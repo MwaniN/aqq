@@ -50,6 +50,7 @@ export default function Quiz ({totalQuotes}) {
 
       // initial API call
     APICalls(setQuote, setCorrectAnime, setChoices)
+
   }, [navigate, totalQuotes])
 
   function handleClick(animeName) {
