@@ -3,11 +3,13 @@ import Choices from './Choices.jsx'
 import {APICalls} from './APICalls.jsx'
 import ResultScreen from './ResultScreen.jsx'
 import GameOver from './GameOver.jsx'
+import { useNavigate } from "react-router";
+
 
 export default function Quiz ({totalQuotes}) {
 
-  // add logic to check for page refresh and take them
-  // back to the home screen
+  let navigate = useNavigate();
+
 
   function shuffle(arr) {
     let array = arr;
@@ -30,11 +32,26 @@ export default function Quiz ({totalQuotes}) {
   const [gameOver, setGameOver] = useState(false);
   const [finalChoice, setFinalChoice] = useState(null);
 
+
   let currentChoice = null;
 
   useEffect(() => {
+
+    // warns them about reloading
+    window.addEventListener("beforeunload", (ev) =>
+      {
+          ev.preventDefault();
+          return ev.returnValue = 'Are you sure you want to close?';
+      });
+
+      // navigate them back to home if totalQuotes turns null from reloading
+      if (totalQuotes == null) {
+        navigate("/")
+      }
+
+      // initial API call
     APICalls(setQuote, setCorrectAnime, setChoices)
-  }, [])
+  }, [navigate, totalQuotes])
 
   function handleClick(animeName) {
     // Update their current choice
