@@ -8,9 +8,6 @@ import { useNavigate } from "react-router";
 
 export default function Quiz ({totalQuotes}) {
 
-  let navigate = useNavigate();
-
-
   function shuffle(arr) {
     let array = arr;
 
@@ -34,6 +31,8 @@ export default function Quiz ({totalQuotes}) {
 
 
   let currentChoice = null;
+
+  let navigate = useNavigate();
 
   useEffect(() => {
 
