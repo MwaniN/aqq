@@ -1,5 +1,7 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
+import * as firebaseui from 'firebaseui';
+import 'firebaseui/dist/firebaseui.css';
 
 
 const firebaseConfig = {
@@ -13,6 +15,25 @@ const firebaseConfig = {
 };
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
-const auth = firebaseApp.auth();
 
-export { auth }
+console.log(firebaseApp)
+
+const uiConfig = {
+  signInFlow: 'popup',
+   signInSuccessUrl: '/',
+  signInOptions: [
+    // your providers
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    firebase.auth.EmailAuthProvider.PROVIDER_ID
+  ],
+  callbacks: {
+    signInSuccessWithAuthResult: () => {
+      // Handle sign-in success
+      return false; // Avoid redirect
+    },
+  },
+};
+
+const ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+export { ui, uiConfig };
