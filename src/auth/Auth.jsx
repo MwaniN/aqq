@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { ui, uiConfig } from './firebaseui-config.js';
 
-const Auth = () => {
+export default function Auth () {
+  console.log("We're in the auth component")
   const uiContainer = useRef(null);
 
   useEffect(() => {
@@ -14,5 +15,3 @@ const Auth = () => {
 
   return <div ref={uiContainer} />
 }
-
-export default Auth;

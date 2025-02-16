@@ -11,7 +11,9 @@ function App() {
   const [login, setLogin] = useState(false)
 
   function handleclick() {
+    console.log("The click handler worked")
     if (login === false) {
+      console.log("login is false")
       return <Auth />
     }
 
