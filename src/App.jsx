@@ -11,6 +11,7 @@ import SignUp from './auth/SignUp.jsx'
 function App() {
 
   const [totalQuotes, setQuoteNum] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,10 +19,13 @@ function App() {
 
       if (user) {
 
+        setLoggedIn(true)
+        const email = user.email
         const uid = user.uid;
-        console.log("uid", uid)
+        console.log("uid", uid, "email", email)
       } else {
 
+        setLoggedIn(false)
         console.log("user is logged out")
       }
     })
@@ -50,8 +54,15 @@ function App() {
       <header id="header">
         <ul>
         <li><Link to="/"><button type="button">Home</button></Link></li>
-        <li><Link to="/login"><button type="button">Log in</button></Link></li>
-        <li><button type="button" onClick={() => handleLogout()}>Log Out</button></li>
+        {
+          function (){
+            if (loggedIn) {
+              return <li><button type="button" onClick={() => handleLogout()}>Log Out</button></li>
+            } else {
+              return <li><Link to="/login"><button type="button">Log in</button></Link></li>
+            }
+          }()
+        }
         </ul>
         <div id="title">
         Anime Quote Quiz
