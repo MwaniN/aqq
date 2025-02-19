@@ -52,21 +52,21 @@ function App() {
   return (
     <>
       <header id="header">
+      <span><Link to="/"><button type="button">Home</button></Link></span>
+        <div id="title">
+        Anime Quote Quiz
+        </div>
         <ul>
-        <li><Link to="/"><button type="button">Home</button></Link></li>
         {
           function (){
             if (loggedIn) {
-              return <li><button type="button" onClick={() => handleLogout()}>Log Out</button></li>
+              return <li><button type="button" onClick={() => handleLogout()}>Sign out</button></li>
             } else {
-              return <li><Link to="/login"><button type="button">Log in</button></Link></li>
+              return <li><Link to="/login"><button type="button">Sign in</button></Link></li>
             }
           }()
         }
         </ul>
-        <div id="title">
-        Anime Quote Quiz
-        </div>
       </header>
       <Routes>
         <Route path='/' element={<HomeScreen setQuoteNum={setQuoteNum} />}/>
