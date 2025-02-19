@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from './firebase.js';
 import { NavLink, useNavigate } from 'react-router';
+import GoogleButton from 'react-google-button';
+
 
 export default function LogIn () {
 
@@ -85,7 +87,7 @@ function GoogleSignIn() {
                     </form>
 
                     <div>OR</div>
-                    <button onClick={() => {GoogleSignIn()}}>Sign in with Google</button>
+                    <GoogleButton onClick={() => {GoogleSignIn()}} />
 
                     <p className="text-sm text-white text-center">
                         No account yet? {' '}
