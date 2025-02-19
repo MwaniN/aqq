@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { Link, Route, Routes } from 'react-router'
 import HomeScreen from './HomeScreen.jsx'
 import Quiz from './Quiz.jsx'
+import LogIn from './auth/LogIn.jsx'
+import SignUp from './auth/SignUp.jsx'
 
 function App() {
 
@@ -22,6 +24,8 @@ function App() {
       <Routes>
         <Route path='/' element={<HomeScreen setQuoteNum={setQuoteNum} />}/>
         <Route path='/quiz' element={<Quiz totalQuotes={totalQuotes} setQuoteNum={setQuoteNum}/>} />
+        <Route path='signup' element={<SignUp />} />
+        <Route path='login' element={<LogIn />} />
       </Routes>
     </>
   )
