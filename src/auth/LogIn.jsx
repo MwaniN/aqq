@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from './firebase.js';
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { auth, googleProvider } from './firebase.js';
 import { NavLink, useNavigate } from 'react-router';
 
 export default function LogIn () {
@@ -25,6 +25,19 @@ export default function LogIn () {
     });
 
 }
+
+function GoogleSignIn() {
+    signInWithPopup(auth, googleProvider).then((userCredential) => {
+        const user = userCredential.user;
+        navigate("/")
+        console.log(user);
+    }
+    ).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage)
+    })
+    };
 
   return (
     <>
@@ -70,6 +83,9 @@ export default function LogIn () {
                             </button>
                         </div>
                     </form>
+
+                    <div>OR</div>
+                    <button onClick={() => {GoogleSignIn()}}>Sign in with Google</button>
 
                     <p className="text-sm text-white text-center">
                         No account yet? {' '}
