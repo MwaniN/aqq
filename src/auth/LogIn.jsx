@@ -17,8 +17,8 @@ export default function LogIn () {
     signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
         // Signed in
-        const user = userCredential.user;
-        user.getIdToken().then(function (idToken){
+
+        userCredential.user.getIdToken().then(function (idToken){
             // send idToken to the backend
             axios({
                 method: 'POST',
@@ -44,8 +44,7 @@ export default function LogIn () {
 function GoogleSignIn() {
     signInWithPopup(auth, googleProvider).then((userCredential) => {
          // Signed in
-         const user = userCredential.user;
-         user.getIdToken().then(function (idToken){
+         userCredential.user.getIdToken().then(function (idToken){
              // send idToken to the backend
              axios({
                  method: 'POST',
