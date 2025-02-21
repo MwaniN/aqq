@@ -28,7 +28,7 @@ export default function LogIn () {
                 }
               })
                 .then(function (response) {
-                  console.log(response)
+                  console.log(response, " This is the response from the server")
                   navigate("/")
                 });
         })
@@ -43,10 +43,22 @@ export default function LogIn () {
 
 function GoogleSignIn() {
     signInWithPopup(auth, googleProvider).then((userCredential) => {
-        const user = userCredential.user;
-        const idToken = user.getIdToken();
-        navigate("/")
-        console.log(idToken);
+         // Signed in
+         const user = userCredential.user;
+         user.getIdToken().then(function (idToken){
+             // send idToken to the backend
+             axios({
+                 method: 'POST',
+                 url: 'http://localhost:3000/verifyUserID',
+                 headers: {
+                     'Authorization': 'Bearer ' + idToken
+                 }
+               })
+                 .then(function (response) {
+                   console.log(response, " This is the response from the server")
+                   navigate("/")
+                 });
+         })
     }
     ).catch((error) => {
         const errorCode = error.code;
