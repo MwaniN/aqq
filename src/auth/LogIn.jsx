@@ -17,8 +17,10 @@ export default function LogIn () {
     .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        navigate("/")
-        console.log(user);
+        user.getIdToken().then(function (idToken){
+            // send idToken to the backend
+            navigate("/")
+        })
     })
     .catch((error) => {
         const errorCode = error.code;
@@ -31,8 +33,9 @@ export default function LogIn () {
 function GoogleSignIn() {
     signInWithPopup(auth, googleProvider).then((userCredential) => {
         const user = userCredential.user;
+        const idToken = user.getIdToken();
         navigate("/")
-        console.log(user);
+        console.log(idToken);
     }
     ).catch((error) => {
         const errorCode = error.code;

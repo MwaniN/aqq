@@ -20,9 +20,7 @@ function App() {
       if (user) {
 
         setLoggedIn(true)
-        const email = user.email
-        const uid = user.uid;
-        console.log("uid", uid, "email", email)
+        console.log("user is logged in dude")
       } else {
 
         setLoggedIn(false)
