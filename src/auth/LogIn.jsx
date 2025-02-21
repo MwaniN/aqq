@@ -3,6 +3,7 @@ import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from './firebase.js';
 import { NavLink, useNavigate } from 'react-router';
 import GoogleButton from 'react-google-button';
+import axios from 'axios';
 
 
 export default function LogIn () {
@@ -19,7 +20,17 @@ export default function LogIn () {
         const user = userCredential.user;
         user.getIdToken().then(function (idToken){
             // send idToken to the backend
-            navigate("/")
+            axios({
+                method: 'POST',
+                url: 'http://localhost:3000/verifyUserID',
+                headers: {
+                    'Authorization': 'Bearer ' + idToken
+                }
+              })
+                .then(function (response) {
+                  console.log(response)
+                  navigate("/")
+                });
         })
     })
     .catch((error) => {
