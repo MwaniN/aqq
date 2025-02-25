@@ -1,4 +1,5 @@
-// import axios from 'axios';
+import axios from 'axios';
+import { useEffect } from 'react';
 
 export default function ProfilePage () {
   let email = 'placeholder@email.com'
@@ -6,8 +7,6 @@ export default function ProfilePage () {
 
   // axios.get('/userProfile', )
 
-  // user email
-  // date joined
   // Favorite Quotes (view all favorited)
       // sort by time added or series name
       // ascending or descending
@@ -20,8 +19,10 @@ export default function ProfilePage () {
       <div>User {email}</div>
       <div>Date joined {timeJoined}</div>
     </div>
-    <div>Bookmarked Quotes</div>
-    <div>Quote Cards Go Here</div>
+    <div>
+      <div>Bookmarked Quotes</div>
+      <div>Quote Cards Go Here</div>
+    </div>
     </>
   )
 }
