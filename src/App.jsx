@@ -7,6 +7,7 @@ import HomeScreen from './HomeScreen.jsx'
 import Quiz from './Quiz.jsx'
 import LogIn from './auth/LogIn.jsx'
 import SignUp from './auth/SignUp.jsx'
+import ProfilePage from './ProfilePage.jsx';
 
 function App() {
 
@@ -71,6 +72,7 @@ function App() {
         <Route path='/quiz' element={<Quiz totalQuotes={totalQuotes} setQuoteNum={setQuoteNum}/>} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/login' element={<LogIn />} />
+        <Route path='/profile' element={<ProfilePage />} />
       </Routes>
     </>
   )
