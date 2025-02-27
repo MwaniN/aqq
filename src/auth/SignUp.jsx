@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router'
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from './firebase.js'
+import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { auth, googleProvider } from './firebase.js'
+import GoogleButton from 'react-google-button';
+import axios from 'axios';
 
 
 export default function SignUp () {
@@ -29,6 +31,33 @@ export default function SignUp () {
           // ..
       });
     }
+
+    function GoogleSignIn() {
+        signInWithPopup(auth, googleProvider).then((userCredential) => {
+             // Signed in
+             userCredential.user.getIdToken().then(function (idToken){
+                 // send idToken to the backend
+                 axios({
+                     method: 'POST',
+                     url: 'http://localhost:3000/signup',
+                     headers: {
+                         'Authorization': 'Bearer ' + idToken
+                     }
+                   })
+                     .then(function (response) {
+                       console.log(response, " This is the response from the server")
+                       navigate("/")
+                     });
+             })
+        }
+        ).catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode, errorMessage)
+        })
+        };
+
+
 
   return (<main >
     <section>
@@ -72,6 +101,9 @@ export default function SignUp () {
                     </button>
 
                 </form>
+
+                <div>OR</div>
+                <GoogleButton onClick={() => {GoogleSignIn()}} />
 
                 <p>
                     Already have an account?{' '}
