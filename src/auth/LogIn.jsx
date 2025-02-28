@@ -22,7 +22,7 @@ export default function LogIn () {
             // send idToken to the backend
             axios({
                 method: 'POST',
-                url: 'http://localhost:3000/verifyUserID',
+                url: 'http://localhost:3000/login',
                 headers: {
                     'Authorization': 'Bearer ' + idToken
                 }
@@ -48,7 +48,7 @@ function GoogleSignIn() {
              // send idToken to the backend
              axios({
                  method: 'POST',
-                 url: 'http://localhost:3000/verifyUserID',
+                 url: 'http://localhost:3000/login',
                  headers: {
                      'Authorization': 'Bearer ' + idToken
                  }
