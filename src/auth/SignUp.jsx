@@ -29,7 +29,7 @@ export default function SignUp () {
                       })
                         .then(function (response) {
                           console.log(response, " This is the response from the server")
-                          navigate("/login")
+                          navigate("/")
                         });
                 })
           // ...
