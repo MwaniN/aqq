@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 
 export default function ProfilePage () {
+  let username = 'placeholder name'
   let email = 'placeholder@email.com'
   let timeJoined = 'March 3rd, 1994'
 
@@ -14,13 +15,13 @@ export default function ProfilePage () {
 
   return (
     <>
-    <div>Welcome to your profile page</div>
+    <div>Hello {username}</div>
     <div className="stats">
-      <div>User {email}</div>
+      <div>Email {email}</div>
       <div>Date joined {timeJoined}</div>
     </div>
     <div>
-      <div>Bookmarked Quotes</div>
+      <div>View Bookmarked Quotes</div>
       <div>Quote Cards Go Here</div>
     </div>
     </>
