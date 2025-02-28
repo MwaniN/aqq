@@ -18,10 +18,20 @@ export default function SignUp () {
 
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-          // Signed in
-          const user = userCredential.user;
-          console.log(user);
-          navigate("/login")
+                userCredential.user.getIdToken().then(function (idToken){
+                    // send idToken to the backend
+                    axios({
+                        method: 'POST',
+                        url: 'http://localhost:3000/signup',
+                        headers: {
+                            'Authorization': 'Bearer ' + idToken
+                        }
+                      })
+                        .then(function (response) {
+                          console.log(response, " This is the response from the server")
+                          navigate("/login")
+                        });
+                })
           // ...
       })
       .catch((error) => {
