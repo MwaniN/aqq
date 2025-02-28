@@ -21,6 +21,7 @@ function App() {
       if (user) {
 
         setLoggedIn(true)
+        // set profile name and email universally while logged in, can use state with an object and / or local storage
         console.log("user is logged in dude")
       } else {
 
