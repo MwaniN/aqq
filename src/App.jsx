@@ -8,6 +8,8 @@ import Quiz from './Quiz.jsx'
 import LogIn from './auth/LogIn.jsx'
 import SignUp from './auth/SignUp.jsx'
 import ProfilePage from './ProfilePage.jsx';
+import { useLocalStorage } from "@uidotdev/usehooks";
+// clear local storage when the user logs out
 
 function App() {
 

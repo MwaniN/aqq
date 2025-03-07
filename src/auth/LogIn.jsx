@@ -4,6 +4,8 @@ import { auth, googleProvider } from './firebase.js';
 import { NavLink, useNavigate } from 'react-router';
 import GoogleButton from 'react-google-button';
 import axios from 'axios';
+import { useLocalStorage } from "@uidotdev/usehooks";
+// store the information spit back from the API in local storage
 
 
 export default function LogIn () {
