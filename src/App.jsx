@@ -66,7 +66,10 @@ function App() {
         {
           function (){
             if (loggedIn) {
-              return <li><button type="button" onClick={() => handleLogout()}>Sign out</button></li>
+              return <ul>
+                <li>User : {userData.email}</li>
+                <li><button type="button" onClick={() => handleLogout()}>Sign out</button></li>
+              </ul>
             } else {
               return <li><Link to="/login"><button type="button">Sign in</button></Link></li>
             }

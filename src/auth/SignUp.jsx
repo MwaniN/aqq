@@ -55,7 +55,7 @@ export default function SignUp ({saveUserData}) {
                      }
                    })
                      .then(function (response) {
-                       console.log(response, " This is the response from the server")
+                        console.log(response.data, " This is the data response from the server")
                        saveUserData(response.data)
                        navigate("/")
                      });
