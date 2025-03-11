@@ -4,11 +4,10 @@ import { auth, googleProvider } from './firebase.js';
 import { NavLink, useNavigate } from 'react-router';
 import GoogleButton from 'react-google-button';
 import axios from 'axios';
-import { useLocalStorage } from "@uidotdev/usehooks";
-// store the information spit back from the API in local storage
+
+export default function LogIn ({saveUserData}) {
 
 
-export default function LogIn () {
 
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -31,6 +30,7 @@ export default function LogIn () {
               })
                 .then(function (response) {
                   console.log(response, " This is the response from the server")
+                  saveUserData(response)
                   navigate("/")
                 });
         })
@@ -57,6 +57,7 @@ function GoogleSignIn() {
                })
                  .then(function (response) {
                    console.log(response, " This is the response from the server")
+                   saveUserData(response)
                    navigate("/")
                  });
          })

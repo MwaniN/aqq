@@ -6,7 +6,7 @@ import GoogleButton from 'react-google-button';
 import axios from 'axios';
 
 
-export default function SignUp () {
+export default function SignUp ({saveUserData}) {
 
   const navigate = useNavigate();
 
@@ -56,6 +56,7 @@ export default function SignUp () {
                    })
                      .then(function (response) {
                        console.log(response, " This is the response from the server")
+                       saveUserData(response)
                        navigate("/")
                      });
              })

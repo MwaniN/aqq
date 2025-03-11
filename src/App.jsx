@@ -17,6 +17,9 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
+  // initialize userInfo where an object can be saved to the userInfo key in localStorage
+  const [userData, saveUserData] = useLocalStorage("aqqUserInfo", null);
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
 
@@ -28,6 +31,7 @@ function App() {
       } else {
 
         setLoggedIn(false)
+        saveUserData(null)
         console.log("user is logged out")
       }
     })
@@ -73,9 +77,9 @@ function App() {
       <Routes>
         <Route path='/' element={<HomeScreen setQuoteNum={setQuoteNum} />}/>
         <Route path='/quiz' element={<Quiz totalQuotes={totalQuotes} setQuoteNum={setQuoteNum}/>} />
-        <Route path='/signup' element={<SignUp />} />
-        <Route path='/login' element={<LogIn />} />
-        <Route path='/profile' element={<ProfilePage />} />
+        <Route path='/signup' element={<SignUp saveUserData={saveUserData}/>} />
+        <Route path='/login' element={<LogIn saveUserData={saveUserData} />} />
+        <Route path='/profile' element={<ProfilePage userData={userData}/>} />
       </Routes>
     </>
   )

@@ -1,7 +1,5 @@
-import axios from 'axios';
-import { useEffect } from 'react';
 
-export default function ProfilePage () {
+export default function ProfilePage ({userData}) {
   let username = 'placeholder name'
   let email = 'placeholder@email.com'
   let timeJoined = 'March 3rd, 1994'
