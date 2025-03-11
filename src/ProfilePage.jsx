@@ -1,5 +1,8 @@
 
 export default function ProfilePage ({userData}) {
+
+  console.log(userData)
+
   let username = 'placeholder name'
   let email = 'placeholder@email.com'
   let timeJoined = 'March 3rd, 1994'
