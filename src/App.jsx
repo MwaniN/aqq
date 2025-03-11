@@ -65,7 +65,7 @@ function App() {
         <ul>
         {
           function (){
-            if (loggedIn) {
+            if (loggedIn && userData) {
               return <ul>
                 <li>User : {userData.email}</li>
                 <li><button type="button" onClick={() => handleLogout()}>Sign out</button></li>
