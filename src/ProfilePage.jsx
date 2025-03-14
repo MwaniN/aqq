@@ -1,12 +1,13 @@
 
 export default function ProfilePage ({userData}) {
 
-  console.log(userData)
+  console.log(userData, " user Data from the profile page")
 
-  let username = 'placeholder name'
-  let email = 'placeholder@email.com'
-  let timeJoined = 'March 3rd, 1994'
+  //let username = 'placeholder name'
+  let email = userData.email
+  let dateJoined = new Date(Number(userData.date_joined))
 
+  console.log(dateJoined, " this is datejoined now")
   // axios.get('/userProfile', )
 
   // Favorite Quotes (view all favorited)
@@ -14,17 +15,21 @@ export default function ProfilePage ({userData}) {
       // ascending or descending
       // paginate results over a certain number
 
-  return (
-    <>
-    <div>Hello {username}</div>
-    <div className="stats">
-      <div>Email {email}</div>
-      <div>Date joined {timeJoined}</div>
-    </div>
-    <div>
-      <div>View Bookmarked Quotes</div>
-      <div>Quote Cards Go Here</div>
-    </div>
-    </>
-  )
+      if (userData){
+        return (
+          <>
+          <div>Profile</div>
+          <div className="stats">
+            <div>User : {email}</div>
+            <div>Joined : {dateJoined.toDateString()}</div>
+          </div>
+          <div>
+            <div>View Bookmarked Quotes</div>
+            <div>Quote Cards Go Here</div>
+          </div>
+          </>
+        )
+      }
+
+
 }
