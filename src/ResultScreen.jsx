@@ -34,13 +34,13 @@ export default function Result ({animeChoice, correctAnime, handleNextButton, lo
         }
       }()
     }
-    {
+    {/* {
       function(){
         if (loggedIn) {
           return <button type="button">Add Quote to favorites</button>
         }
       }()
-    }
+    } */}
     <button type="button" className="advance-button" onClick={() => handleNextButton()}>Next</button>
   </div>
 }

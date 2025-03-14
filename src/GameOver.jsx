@@ -1,8 +1,14 @@
-import {Link} from 'react-router'
+import {Link} from 'react-router';
+import { useEffect } from 'react';
 
-export default function GameOver({finalScore}) {
+export default function GameOver({finalScore, noReload}) {
 
-  let endingArr = [`You are a regular savant.`, `You went full Super Saiyan.`, `Good job.`]
+  useEffect(() => {
+
+    window.removeEventListener("beforeunload", noReload)
+  })
+
+  let endingArr = [`You are a regular savant.`, `You went full Super Saiyan.`, `Good job.`, `Nicely done.`]
 
   function randomIntFromInterval(min, max) { // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -18,6 +24,7 @@ export default function GameOver({finalScore}) {
     <div>
       {
         function(){
+
           if (finalScore > 0) {
             return <div>{`Congratulations! You got ${finalScore} correct. ${finalQuote}`}</div>
           } else {

@@ -24,6 +24,7 @@ export default function Quiz ({totalQuotes, loggedIn}) {
   const [correctAnime, setCorrectAnime] = useState(null);
   const [choices, setChoices] = useState(null);
   const [currQuoteNum, setNum] = useState(1);
+ // const [quoteId, setQuoteId] = useState(null);
   const [currScore, setScore] = useState(0);
   const [submissionMade, setSubmissionMade] = useState(false);
   const [gameOver, setGameOver] = useState(false);
@@ -34,14 +35,16 @@ export default function Quiz ({totalQuotes, loggedIn}) {
 
   let navigate = useNavigate();
 
+  function noReload (ev) {
+
+    ev.preventDefault();
+    return ev.returnValue = 'Are you sure you want to close?';
+  }
+
   useEffect(() => {
 
     // warns them about reloading
-    window.addEventListener("beforeunload", (ev) =>
-      {
-          ev.preventDefault();
-          return ev.returnValue = 'Are you sure you want to close?';
-      });
+    window.addEventListener("beforeunload", noReload);
 
       // navigate them back to home if totalQuotes turns null from reloading
       if (totalQuotes == null) {
@@ -127,7 +130,7 @@ export default function Quiz ({totalQuotes, loggedIn}) {
       {function (){
 
         if (gameOver) {
-          return <GameOver finalScore={currScore}/>
+          return <GameOver finalScore={currScore} noReload={noReload}/>
         } else if(submissionMade && !gameOver) {
           return <ResultScreen animeChoice={finalChoice} correctAnime={correctAnime} handleNextButton={handleNextButton} loggedIn={loggedIn}/>
         } else if (choices && quote) {

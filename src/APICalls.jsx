@@ -6,7 +6,7 @@ export function APICalls (setQuote, setCorrectAnime, setChoices) {
    // retrive the first anime quote
    axios.get(`http://localhost:3000/randomQuote`
    ).then(function (response) {
-     // console.log(response.data, " This is response.data")
+     console.log(response.data, " This is response.data")
      // console.log(response.data.anime, " This is response.anime")
    setQuote(response.data.content);
    setCorrectAnime(response.data.anime.name);
