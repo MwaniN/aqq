@@ -4,8 +4,11 @@ export default function ProfilePage ({userData}) {
   console.log(userData, " user Data from the profile page")
 
   //let username = 'placeholder name'
-  let email = userData.email
-  let dateJoined = new Date(Number(userData.date_joined))
+  let email = userData.email || ""
+
+  if (userData) {
+    var dateJoined = new Date(Number(userData.date_joined))
+  }
 
   console.log(dateJoined, " this is datejoined now")
   // axios.get('/userProfile', )
@@ -29,6 +32,9 @@ export default function ProfilePage ({userData}) {
           </div>
           </>
         )
+      } else {
+
+        return "Not logged in"
       }
 
 
