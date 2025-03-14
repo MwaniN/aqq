@@ -6,7 +6,7 @@ import GameOver from './GameOver.jsx'
 import { useNavigate } from "react-router";
 
 
-export default function Quiz ({totalQuotes}) {
+export default function Quiz ({totalQuotes, loggedIn}) {
 
   function shuffle(arr) {
     let array = arr;
@@ -129,7 +129,7 @@ export default function Quiz ({totalQuotes}) {
         if (gameOver) {
           return <GameOver finalScore={currScore}/>
         } else if(submissionMade && !gameOver) {
-          return <ResultScreen animeChoice={finalChoice} correctAnime={correctAnime} handleNextButton={handleNextButton}/>
+          return <ResultScreen animeChoice={finalChoice} correctAnime={correctAnime} handleNextButton={handleNextButton} loggedIn={loggedIn}/>
         } else if (choices && quote) {
           return <div className="prompt">What anime is this from?</div>
         } else if (quote && !choices) {

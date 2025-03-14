@@ -1,6 +1,6 @@
 // include option to save quote to their favorites in the future
 
-export default function Result ({animeChoice, correctAnime, handleNextButton}) {
+export default function Result ({animeChoice, correctAnime, handleNextButton, loggedIn}) {
 
   // show a different screen depending on if correct is false or not
   // have a button that moves on to the next quote
@@ -31,6 +31,13 @@ export default function Result ({animeChoice, correctAnime, handleNextButton}) {
           return `Correct! You chose ${animeChoice} and the quote was from ${correctAnime}`
         } else {
           return `Wrong! You chose ${animeChoice} and the quote was from ${correctAnime}`
+        }
+      }()
+    }
+    {
+      function(){
+        if (loggedIn) {
+          return <button type="button">Add Quote to favorites</button>
         }
       }()
     }
