@@ -1,11 +1,18 @@
 import {Link} from 'react-router';
 import { useEffect } from 'react';
+import axios from 'axios';
 
-export default function GameOver({finalScore, noReload}) {
+export default function GameOver({finalScore, noReload, loggedIn}) {
 
   useEffect(() => {
 
     window.removeEventListener("beforeunload", noReload)
+
+    if (loggedIn) {
+      axios.put('http://localhost:3000/update_stats', {
+        score : finalScore
+      })
+    }
   })
 
   let endingArr = [`You are a regular savant.`, `You went full Super Saiyan.`, `Good job.`, `Nice.`]

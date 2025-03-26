@@ -130,7 +130,7 @@ export default function Quiz ({totalQuotes, loggedIn}) {
       {function (){
 
         if (gameOver) {
-          return <GameOver finalScore={currScore} noReload={noReload}/>
+          return <GameOver finalScore={currScore} noReload={noReload} loggedIn={loggedIn}/>
         } else if(submissionMade && !gameOver) {
           return <ResultScreen animeChoice={finalChoice} correctAnime={correctAnime} handleNextButton={handleNextButton} loggedIn={loggedIn}/>
         } else if (choices && quote) {
