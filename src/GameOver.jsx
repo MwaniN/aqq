@@ -8,7 +8,7 @@ export default function GameOver({finalScore, noReload}) {
     window.removeEventListener("beforeunload", noReload)
   })
 
-  let endingArr = [`You are a regular savant.`, `You went full Super Saiyan.`, `Good job.`, `Nicely done.`]
+  let endingArr = [`You are a regular savant.`, `You went full Super Saiyan.`, `Good job.`, `Nice.`]
 
   function randomIntFromInterval(min, max) { // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
