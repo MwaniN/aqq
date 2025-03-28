@@ -1,7 +1,7 @@
 import './App.css'
 import { useState, useEffect} from 'react'
 import { Link, Route, Routes, useNavigate } from 'react-router'
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signOut, onIdTokenChanged } from 'firebase/auth';
 import { auth } from './auth/firebase.js';
 import HomeScreen from './HomeScreen.jsx'
 import Quiz from './Quiz.jsx'
@@ -9,6 +9,7 @@ import LogIn from './auth/LogIn.jsx'
 import SignUp from './auth/SignUp.jsx'
 import ProfilePage from './ProfilePage.jsx';
 import { useLocalStorage } from "@uidotdev/usehooks";
+import axios from 'axios';
 // clear local storage when the user logs out
 
 function App() {
@@ -35,6 +36,18 @@ function App() {
         console.log("user is logged out")
       }
     })
+
+    onIdTokenChanged(auth, (user) => {
+      if (user) {
+        // set the global header for axios calls if the token changes
+        // this will keep the token current if the user's logged in for a long time since Firebase periodically changes the token of logged in users
+        user.getIdToken().then((idToken) => {
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + idToken;
+
+        })
+      }
+    })
+
   }
 
   )
