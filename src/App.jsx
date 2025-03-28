@@ -42,8 +42,9 @@ function App() {
         // set the global header for axios calls if the token changes
         // this will keep the token current if the user's logged in for a long time since Firebase periodically changes the token of logged in users
         user.getIdToken().then((idToken) => {
-          axios.defaults.headers.common['Authorization'] = 'Bearer ' + idToken;
-
+            if (axios.defaults.headers.common['Authorization'].split(' ')[1] != idToken){
+              axios.defaults.headers.common['Authorization'] = 'Bearer ' + idToken;
+            }
         })
       }
     })
