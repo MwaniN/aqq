@@ -20,16 +20,17 @@ export default function LogIn ({saveUserData}) {
         // Signed in
 
         userCredential.user.getIdToken().then(function (idToken){
-            // set default idToken for API calls and log in with token from the backend
-
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + idToken;
+            // log in with token from the backend and save it to local storage for future reference
 
             axios({
                 method: 'POST',
-                url: 'http://localhost:3000/login'
+                url: 'http://localhost:3000/login',
+                'Authorization': `Bearer ${idToken}`
               })
                 .then(function (response) {
                   console.log(response.data, " This is the data response from the server")
+                  let userStuff = response.data
+                  userStuff['token'] = idToken;
                   saveUserData(response.data)
                   navigate("/")
                 });
@@ -57,7 +58,9 @@ function GoogleSignIn() {
                })
                  .then(function (response) {
                     console.log(response.data, " This is the data response from the server")
-                   saveUserData(response.data)
+                    let userStuff = response.data
+                    userStuff['token'] = idToken;
+                   saveUserData(userStuff)
                    navigate("/")
                  });
          })

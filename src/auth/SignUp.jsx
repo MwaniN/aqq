@@ -56,6 +56,8 @@ export default function SignUp ({saveUserData}) {
                    })
                      .then(function (response) {
                         console.log(response.data, " This is the data response from the server")
+                        let userStuff = response.data
+                        userStuff['token'] = idToken;
                        saveUserData(response.data)
                        navigate("/")
                      });

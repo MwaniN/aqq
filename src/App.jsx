@@ -9,8 +9,6 @@ import LogIn from './auth/LogIn.jsx'
 import SignUp from './auth/SignUp.jsx'
 import ProfilePage from './ProfilePage.jsx';
 import { useLocalStorage } from "@uidotdev/usehooks";
-import axios from 'axios';
-// clear local storage when the user logs out
 
 function App() {
 
@@ -26,29 +24,30 @@ function App() {
 
       if (user) {
 
-        setLoggedIn(true)
-        // set profile name and email universally while logged in, can use state with an object and / or local storage
-        console.log("user is logged in dude")
+        if (!loggedIn){
+          setLoggedIn(true)
+          // set profile name and email universally while logged in, can use state with an object and / or local storage
+          console.log("user is logged in dude")
+        }
       } else {
-
-        setLoggedIn(false)
-        saveUserData(null)
-        console.log("user is logged out")
+        if (loggedIn) {
+          setLoggedIn(false)
+          saveUserData(null)
+          console.log("user is logged out")
+        }
       }
     })
 
     onIdTokenChanged(auth, (user) => {
-      if (user) {
-        // set the global header for axios calls if the token changes
-        // this will keep the token current if the user's logged in for a long time since Firebase periodically changes the token of logged in users
 
-        console.log((axios.defaults.headers.common['Authorization'] || 'no auth token yet..'), " here's the global auth token from onIdTokenChanged")
+      console.log(userData, " uhh it's userData")
+      if (user && userData['token']) {
 
         user.getIdToken().then((idToken) => {
-          if (axios.defaults.headers.common['Authorization']) {
-            if (axios.defaults.headers.common['Authorization'].split(' ')[1] != idToken){
-              axios.defaults.headers.common['Authorization'] = 'Bearer ' + idToken;
-            }
+          if (idToken != userData['token']) {
+            let userStuff = userData
+            userStuff['token'] = idToken;
+            saveUserData(userStuff)
           }
         })
       }
