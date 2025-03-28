@@ -20,13 +20,13 @@ export default function LogIn ({saveUserData}) {
         // Signed in
 
         userCredential.user.getIdToken().then(function (idToken){
-            // send idToken to the backend
+            // set default idToken for API calls and log in with token from the backend
+
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + idToken;
+
             axios({
                 method: 'POST',
-                url: 'http://localhost:3000/login',
-                headers: {
-                    'Authorization': 'Bearer ' + idToken
-                }
+                url: 'http://localhost:3000/login'
               })
                 .then(function (response) {
                   console.log(response.data, " This is the data response from the server")
@@ -47,13 +47,13 @@ function GoogleSignIn() {
     signInWithPopup(auth, googleProvider).then((userCredential) => {
          // Signed in
          userCredential.user.getIdToken().then(function (idToken){
-             // send idToken to the backend
+             // set default idToken for API calls and log in with token from the backend
+
+             axios.defaults.headers.common['Authorization'] = 'Bearer ' + idToken;
+
              axios({
                  method: 'POST',
-                 url: 'http://localhost:3000/login',
-                 headers: {
-                     'Authorization': 'Bearer ' + idToken
-                 }
+                 url: 'http://localhost:3000/login'
                })
                  .then(function (response) {
                     console.log(response.data, " This is the data response from the server")
