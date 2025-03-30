@@ -39,11 +39,10 @@ function App() {
     })
 
     onIdTokenChanged(auth, (user) => {
-
-      console.log(userData, " uhh it's userData")
-      if (user && userData['token']) {
+      if (user && userData) {
 
         user.getIdToken().then((idToken) => {
+
           if (idToken != userData['token']) {
             let userStuff = userData
             userStuff['token'] = idToken;

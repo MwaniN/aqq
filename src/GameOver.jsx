@@ -9,8 +9,13 @@ export default function GameOver({finalScore, noReload, loggedIn}) {
     window.removeEventListener("beforeunload", noReload)
 
     if (loggedIn) {
-      axios.put('http://localhost:3000/update_stats', {
-        score : finalScore
+
+      let scoreUpdate = {score: finalScore}
+      axios.put('http://localhost:3000/update_stats', scoreUpdate).then((response) =>
+      {
+        console.log(response)
+      }).catch((error) => {
+        console.log(error)
       })
     }
   })
