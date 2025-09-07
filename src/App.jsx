@@ -96,7 +96,7 @@ function App() {
       </header>
       <Routes>
         <Route path='/' element={<HomeScreen setQuoteNum={setQuoteNum} />}/>
-        <Route path='/quiz' element={<Quiz totalQuotes={totalQuotes} setQuoteNum={setQuoteNum} loggedIn={loggedIn}/>} />
+        <Route path='/quiz' element={<Quiz totalQuotes={totalQuotes} setQuoteNum={setQuoteNum} loggedIn={loggedIn} userData={userData}/>} />
         <Route path='/signup' element={<SignUp saveUserData={saveUserData}/>} />
         <Route path='/login' element={<LogIn saveUserData={saveUserData} />} />
         <Route path='/profile' element={<ProfilePage userData={userData}/>} />

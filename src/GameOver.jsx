@@ -2,7 +2,7 @@ import {Link} from 'react-router';
 import { useEffect } from 'react';
 import axios from 'axios';
 
-export default function GameOver({finalScore, noReload, loggedIn}) {
+export default function GameOver({finalScore, noReload, loggedIn, userData}) {
 
   useEffect(() => {
 
@@ -11,7 +11,11 @@ export default function GameOver({finalScore, noReload, loggedIn}) {
     if (loggedIn) {
 
       let scoreUpdate = {score: finalScore}
-      axios.put('http://localhost:3000/update_stats', scoreUpdate).then((response) =>
+      axios.put('http://localhost:3000/update_stats', scoreUpdate, {
+        headers: {
+          'Authorization': `Bearer ${userData.token}`
+        }
+      }).then((response) =>
       {
         console.log(response)
       }).catch((error) => {
