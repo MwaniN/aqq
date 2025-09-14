@@ -18,12 +18,16 @@ function App() {
   const dispatch = useDispatch();
   
   // Get auth state from Redux
-  const { isAuthenticated, userData, isLoading } = useSelector(state => state.auth);
+  const { isAuthenticated, userData, isLoading, authInitialized } = useSelector(state => state.auth);
+  
 
   useEffect(() => {
-    // Initialize Firebase auth check using Redux
-    dispatch(initializeAuth());
-  }, [dispatch]);
+    // Initialize Firebase auth check using Redux (only once on app startup)
+    if (!authInitialized) {
+      dispatch(initializeAuth());
+    } else {
+    }
+  }, [dispatch, authInitialized]);
 
   function handleLogout() {
     signOut(auth).then(() => {

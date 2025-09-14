@@ -7,18 +7,29 @@ export const initializeAuth = createAsyncThunk(
   'auth/initialize',
   () => {
     return new Promise((resolve) => {
-      onAuthStateChanged(auth, (user) => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        unsubscribe() // Unsubscribe immediately to prevent multiple calls
+        
         if (user) {
-          // User is logged in - get token and sync with localStorage
+          // User is logged in - get token and check localStorage for full user data
           user.getIdToken().then((idToken) => {
-            const userData = {
-              uid: user.uid,
-              email: user.email,
-              token: idToken
+            // Check if we have full user data in localStorage
+            const savedUserData = localStorage.getItem('aqqUserInfo')
+            if (savedUserData) {
+              const parsedData = JSON.parse(savedUserData)
+              // Update token in case it changed
+              parsedData.token = idToken
+              localStorage.setItem('aqqUserInfo', JSON.stringify(parsedData))
+              resolve(parsedData)
+            } else {
+              // No saved data, create basic userData (will be updated when user logs in)
+              const userData = {
+                uid: user.uid,
+                email: user.email,
+                token: idToken
+              }
+              resolve(userData)
             }
-            // Update localStorage for persistence
-            localStorage.setItem('aqqUserInfo', JSON.stringify(userData))
-            resolve(userData)
           })
         } else {
           // User is not logged in - clear localStorage
@@ -34,7 +45,8 @@ const initialState = {
   user: null,
   isAuthenticated: false,
   isLoading: true,
-  userData: null
+  userData: null,
+  authInitialized: false
 }
 
 const authSlice = createSlice({
@@ -43,6 +55,16 @@ const authSlice = createSlice({
   reducers: {
     setUserData: (state, action) => {
       state.userData = action.payload
+      state.isAuthenticated = !!action.payload
+      state.user = action.payload
+      state.authInitialized = true // Mark as initialized when user data is set
+      
+      // Save to localStorage for persistence
+      if (action.payload) {
+        localStorage.setItem('aqqUserInfo', JSON.stringify(action.payload))
+      } else {
+        localStorage.removeItem('aqqUserInfo')
+      }
     },
     logout: (state) => {
       state.user = null
@@ -64,6 +86,7 @@ const authSlice = createSlice({
         state.isAuthenticated = !!action.payload
         state.userData = action.payload
         state.isLoading = false
+        state.authInitialized = true
       })
       .addCase(initializeAuth.rejected, (state) => {
         // Firebase auth check failed (network error, etc.)

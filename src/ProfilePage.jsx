@@ -19,7 +19,7 @@ export default function ProfilePage() {
 
   // User is authenticated, show profile
   let email = userData.email || ""
-  let dateJoined = new Date(Number(userData.date_joined))
+  let dateJoined = userData.date_joined ? new Date(Number(userData.date_joined)) : new Date()
 
   console.log(dateJoined, " this is datejoined now")
   // axios.get('/userProfile', )
