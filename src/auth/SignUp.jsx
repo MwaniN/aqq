@@ -4,9 +4,12 @@ import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from './firebase.js'
 import GoogleButton from 'react-google-button';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setUserData } from '../store/authSlice';
 
 
-export default function SignUp ({saveUserData}) {
+export default function SignUp() {
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -58,8 +61,9 @@ export default function SignUp ({saveUserData}) {
                         console.log(response.data, " This is the data response from the server")
                         let userStuff = response.data
                         userStuff['token'] = idToken;
-                       saveUserData(response.data)
-                       navigate("/")
+                        // Dispatch Redux action instead of calling saveUserData prop
+                        dispatch(setUserData(userStuff))
+                        navigate("/")
                      });
              })
         }
