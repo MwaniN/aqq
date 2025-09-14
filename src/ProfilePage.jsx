@@ -1,14 +1,25 @@
 
-export default function ProfilePage ({userData}) {
+import { useSelector } from 'react-redux';
+
+export default function ProfilePage() {
+  // Get auth state from Redux
+  const { isAuthenticated, userData, isLoading } = useSelector(state => state.auth);
 
   console.log(userData, " user Data from the profile page")
 
-  //let username = 'placeholder name'
-  let email = userData.email || ""
-
-  if (userData) {
-    var dateJoined = new Date(Number(userData.date_joined))
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return <div>Loading...</div>
   }
+
+  // Show not logged in message only after auth check is complete
+  if (!isAuthenticated || !userData) {
+    return <div>Not logged in</div>
+  }
+
+  // User is authenticated, show profile
+  let email = userData.email || ""
+  let dateJoined = new Date(Number(userData.date_joined))
 
   console.log(dateJoined, " this is datejoined now")
   // axios.get('/userProfile', )
@@ -18,24 +29,18 @@ export default function ProfilePage ({userData}) {
       // ascending or descending
       // paginate results over a certain number
 
-      if (userData){
-        return (
-          <>
-          <div>Profile</div>
-          <div className="stats">
-            <div>User : {email}</div>
-            <div>Joined : {dateJoined.toDateString()}</div>
-          </div>
-          <div>
-            <div>View Bookmarked Quotes</div>
-            <div>Quote Cards Go Here</div>
-          </div>
-          </>
-        )
-      } else {
-
-        return "Not logged in"
-      }
-
+  return (
+    <>
+      <div>Profile</div>
+      <div className="stats">
+        <div>User : {email}</div>
+        <div>Joined : {dateJoined.toDateString()}</div>
+      </div>
+      <div>
+        <div>View Bookmarked Quotes</div>
+        <div>Quote Cards Go Here</div>
+      </div>
+    </>
+  )
 
 }
