@@ -1,74 +1,39 @@
 import './App.css'
 import { useState, useEffect} from 'react'
 import { Link, Route, Routes, useNavigate } from 'react-router'
-import { onAuthStateChanged, signOut, onIdTokenChanged } from 'firebase/auth';
+import { signOut } from 'firebase/auth';
 import { auth } from './auth/firebase.js';
 import HomeScreen from './HomeScreen.jsx'
 import Quiz from './Quiz.jsx'
 import LogIn from './auth/LogIn.jsx'
 import SignUp from './auth/SignUp.jsx'
 import ProfilePage from './ProfilePage.jsx';
-import { useLocalStorage } from "@uidotdev/usehooks";
+import { useSelector, useDispatch } from 'react-redux';
+import { initializeAuth, logout } from './store/authSlice';
 
 function App() {
 
   const [totalQuotes, setQuoteNum] = useState(null);
-  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
-
-  // initialize userInfo where an object can be saved to the userInfo key in localStorage
-  const [userData, saveUserData] = useLocalStorage("aqqUserInfo", null);
+  const dispatch = useDispatch();
+  
+  // Get auth state from Redux
+  const { isAuthenticated, userData, isLoading } = useSelector(state => state.auth);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-
-      if (user) {
-
-        if (!loggedIn){
-          setLoggedIn(true)
-          // set profile name and email universally while logged in, can use state with an object and / or local storage
-          console.log("user is logged in dude")
-        }
-      } else {
-        if (loggedIn) {
-          setLoggedIn(false)
-          saveUserData(null)
-          console.log("user is logged out")
-        }
-      }
-    })
-
-    onIdTokenChanged(auth, (user) => {
-      if (user && userData) {
-
-        user.getIdToken().then((idToken) => {
-
-          if (idToken != userData['token']) {
-            let userStuff = userData
-            userStuff['token'] = idToken;
-            saveUserData(userStuff)
-          }
-        })
-      }
-    })
-
-  }
-
-  )
+    // Initialize Firebase auth check using Redux
+    dispatch(initializeAuth());
+  }, [dispatch]);
 
   function handleLogout() {
-
     signOut(auth).then(() => {
-      // Sign out successful.
+      // Dispatch Redux logout action
+      dispatch(logout());
       navigate("/");
       console.log("Signed out successfully")
-    }
-    ).catch((error) => {
-      // an error happened
+    }).catch((error) => {
       console.log(error)
     })
-
-
   }
 
 
@@ -82,7 +47,7 @@ function App() {
         <ul>
         {
           function (){
-            if (loggedIn && userData) {
+            if (isAuthenticated && userData) {
               return <ul>
                 <li>User : {userData.email}</li>
                 <li><button type="button" onClick={() => handleLogout()}>Sign out</button></li>
@@ -96,10 +61,10 @@ function App() {
       </header>
       <Routes>
         <Route path='/' element={<HomeScreen setQuoteNum={setQuoteNum} />}/>
-        <Route path='/quiz' element={<Quiz totalQuotes={totalQuotes} setQuoteNum={setQuoteNum} loggedIn={loggedIn} userData={userData}/>} />
-        <Route path='/signup' element={<SignUp saveUserData={saveUserData}/>} />
-        <Route path='/login' element={<LogIn saveUserData={saveUserData} />} />
-        <Route path='/profile' element={<ProfilePage userData={userData}/>} />
+        <Route path='/quiz' element={<Quiz totalQuotes={totalQuotes} setQuoteNum={setQuoteNum} />} />
+        <Route path='/signup' element={<SignUp />} />
+        <Route path='/login' element={<LogIn />} />
+        <Route path='/profile' element={<ProfilePage />} />
       </Routes>
     </>
   )
