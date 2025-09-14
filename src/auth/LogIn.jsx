@@ -4,8 +4,11 @@ import { auth, googleProvider } from './firebase.js';
 import { NavLink, useNavigate } from 'react-router';
 import GoogleButton from 'react-google-button';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setUserData } from '../store/authSlice';
 
-export default function LogIn ({saveUserData}) {
+export default function LogIn() {
+  const dispatch = useDispatch();
 
 
 
@@ -31,7 +34,8 @@ export default function LogIn ({saveUserData}) {
                   console.log(response.data, " This is the data response from the server")
                   let userStuff = response.data
                   userStuff['token'] = idToken;
-                  saveUserData(response.data)
+                  // Dispatch Redux action instead of calling saveUserData prop
+                  dispatch(setUserData(userStuff))
                   navigate("/")
                 });
         })
@@ -60,8 +64,9 @@ function GoogleSignIn() {
                     console.log(response.data, " This is the data response from the server")
                     let userStuff = response.data
                     userStuff['token'] = idToken;
-                   saveUserData(userStuff)
-                   navigate("/")
+                    // Dispatch Redux action instead of calling saveUserData prop
+                    dispatch(setUserData(userStuff))
+                    navigate("/")
                  });
          })
     }
