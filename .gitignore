@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .env
+
+# Implementation plans and documentation
+REDUX_IMPLEMENTATION_PLAN.md
