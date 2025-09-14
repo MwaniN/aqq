@@ -4,9 +4,12 @@ import {APICalls} from './APICalls.jsx'
 import ResultScreen from './ResultScreen.jsx'
 import GameOver from './GameOver.jsx'
 import { useNavigate } from "react-router";
+import { useSelector } from 'react-redux';
 
 
-export default function Quiz ({totalQuotes, loggedIn, userData}) {
+export default function Quiz ({totalQuotes}) {
+  // Get auth state from Redux
+  const { isAuthenticated, userData } = useSelector(state => state.auth);
 
   function shuffle(arr) {
     let array = arr;
@@ -130,9 +133,9 @@ export default function Quiz ({totalQuotes, loggedIn, userData}) {
       {function (){
 
         if (gameOver) {
-          return <GameOver finalScore={currScore} noReload={noReload} loggedIn={loggedIn} userData={userData}/>
+          return <GameOver finalScore={currScore} noReload={noReload} />
         } else if(submissionMade && !gameOver) {
-          return <ResultScreen animeChoice={finalChoice} correctAnime={correctAnime} handleNextButton={handleNextButton} loggedIn={loggedIn}/>
+          return <ResultScreen animeChoice={finalChoice} correctAnime={correctAnime} handleNextButton={handleNextButton} loggedIn={isAuthenticated}/>
         } else if (choices && quote) {
           return <div className="prompt">What anime is this from?</div>
         } else if (quote && !choices) {
