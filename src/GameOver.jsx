@@ -1,14 +1,17 @@
 import {Link} from 'react-router';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
-export default function GameOver({finalScore, noReload, loggedIn, userData}) {
+export default function GameOver({finalScore, noReload}) {
+  // Get auth state from Redux
+  const { isAuthenticated, userData } = useSelector(state => state.auth);
 
   useEffect(() => {
 
     window.removeEventListener("beforeunload", noReload)
 
-    if (loggedIn) {
+    if (isAuthenticated) {
 
       let scoreUpdate = {score: finalScore}
       axios.put('http://localhost:3000/update_stats', scoreUpdate, {
