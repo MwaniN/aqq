@@ -21,14 +21,6 @@ export default function ProfilePage() {
   let email = userData.email || ""
   let dateJoined = userData.date_joined ? new Date(Number(userData.date_joined)) : new Date()
 
-  console.log(dateJoined, " this is datejoined now")
-  // axios.get('/userProfile', )
-
-  // Favorite Quotes (view all favorited)
-      // sort by time added or series name
-      // ascending or descending
-      // paginate results over a certain number
-
   return (
     <>
       <div>Profile</div>

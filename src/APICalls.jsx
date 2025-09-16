@@ -7,7 +7,6 @@ export function APICalls (setQuote, setCorrectAnime, setChoices) {
    axios.get(`http://localhost:3000/randomQuote`
    ).then(function (response) {
      console.log(response.data, " This is response.data")
-     // console.log(response.data.anime, " This is response.anime")
    setQuote(response.data.content);
    setCorrectAnime(response.data.anime.name);
 
@@ -16,9 +15,9 @@ export function APICalls (setQuote, setCorrectAnime, setChoices) {
 
    axios.get(`http://localhost:3000/random4Anime`
    ).then( function (response) {
-     // console.log(response, ' This is the response from the random3Anime call')
+    
      setChoices(response.data)
-     // console.log(choices, " This is the initial choices state Array")
+
    }
    ).catch(
      function(error) {
