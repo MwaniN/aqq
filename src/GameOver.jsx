@@ -1,17 +1,17 @@
 import {Link} from 'react-router';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { resetQuiz } from './store/quizSlice';
 
-export default function GameOver({finalScore, noReload}) {
+export default function GameOver({finalScore, quizLength}) {
   // Get auth state from Redux
   const { isAuthenticated, userData } = useSelector(state => state.auth);
+  const dispatch = useDispatch();
 
   useEffect(() => {
 
-    window.removeEventListener("beforeunload", noReload)
-
-    if (isAuthenticated) {
+    if (isAuthenticated && userData && userData.token) {
 
       let scoreUpdate = {score: finalScore}
       axios.put('http://localhost:3000/update_stats', scoreUpdate, {
@@ -25,7 +25,12 @@ export default function GameOver({finalScore, noReload}) {
         console.log(error)
       })
     }
-  })
+    
+    // Reset quiz state when component unmounts (user goes back to home)
+    return () => {
+      dispatch(resetQuiz({ quizLength }));
+    };
+  }, [dispatch, isAuthenticated, userData, finalScore])
 
   let endingArr = [`You are a regular savant.`, `You went full Super Saiyan.`, `Good job.`, `Nice.`]
 

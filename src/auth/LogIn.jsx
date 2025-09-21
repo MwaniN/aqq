@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { signInWithEmailAndPassword, signInWithRedirect, getRedirectResult } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithRedirect } from 'firebase/auth';
 import { auth, googleProvider } from './firebase.js';
 import { NavLink, useNavigate, useSearchParams } from 'react-router';
 import GoogleButton from 'react-google-button';
@@ -38,58 +38,6 @@ export default function LogIn() {
     }
   }, [searchParams]);
 
-  // Handle Google sign-in redirect result
-  useEffect(() => {
-    getRedirectResult(auth).then((result) => {
-      if (result) {
-        // User signed in via redirect
-        result.user.getIdToken().then((idToken) => {
-          axios({
-            method: 'POST',
-            url: 'http://localhost:3000/login',
-            headers: {
-              'Authorization': `Bearer ${idToken}`
-            }
-          })
-          .then((response) => {
-            console.log(response.data, " This is the data response from the server")
-            let userStuff = response.data
-            userStuff['token'] = idToken;
-            dispatch(setUserData(userStuff))
-            
-            // Return to original location or home
-            const returnLocation = localStorage.getItem('returnAfterLogin');
-            if (returnLocation) {
-              try {
-                const location = JSON.parse(returnLocation);
-                localStorage.removeItem('returnAfterLogin');
-                
-                // Check if the stored location is not too old (24 hours)
-                const isExpired = Date.now() - location.timestamp > 24 * 60 * 60 * 1000;
-                if (!isExpired) {
-                  navigate(location.path + location.search);
-                } else {
-                  navigate('/');
-                }
-              } catch (error) {
-                console.log('Error parsing return location:', error);
-                localStorage.removeItem('returnAfterLogin');
-                navigate('/');
-              }
-            } else {
-              navigate('/');
-            }
-          })
-          .catch((error) => {
-            console.log('Error after redirect:', error);
-            navigate('/');
-          });
-        });
-      }
-    }).catch((error) => {
-      console.log('Redirect result error:', error);
-    });
-  }, [dispatch, navigate]);
 
   const onLogin = (e) => {
     e.preventDefault();
@@ -146,21 +94,32 @@ export default function LogIn() {
 }
 
 function GoogleSignIn() {
+  console.log('GoogleSignIn function called');
+  console.log('Auth instance:', auth);
+  console.log('Google provider:', googleProvider);
+  
   // Store current location before redirect
   const returnLocation = {
     path: window.location.pathname,
     search: window.location.search,
     timestamp: Date.now()
   };
-  
+
   localStorage.setItem('returnAfterLogin', JSON.stringify(returnLocation));
+  console.log('Stored return location:', returnLocation);
   
   // Redirect to Google sign-in
-  signInWithRedirect(auth, googleProvider).catch((error) => {
-    console.log('Redirect error:', error);
-    // Clean up stored location on error
-    localStorage.removeItem('returnAfterLogin');
-  });
+  console.log('Starting Google sign-in redirect...');
+  signInWithRedirect(auth, googleProvider)
+    .then(() => {
+      console.log('signInWithRedirect promise resolved - redirect should be happening');
+    })
+    .catch((error) => {
+      console.log('Redirect error:', error);
+      console.error('Full error details:', error);
+      // Clean up stored location on error
+      localStorage.removeItem('returnAfterLogin');
+    });
 };
 
   return (

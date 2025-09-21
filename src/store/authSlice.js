@@ -96,6 +96,10 @@ const authSlice = createSlice({
       
       // Clear localStorage when logging out
       localStorage.removeItem('aqqUserInfo')
+      // Clear all quiz states
+      localStorage.removeItem('aqqQuizState_5')
+      localStorage.removeItem('aqqQuizState_10')
+      localStorage.removeItem('aqqQuizState_15')
     }
   },
   extraReducers: (builder) => {

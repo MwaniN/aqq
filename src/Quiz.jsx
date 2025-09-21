@@ -4,12 +4,30 @@ import {APICalls} from './APICalls.jsx'
 import ResultScreen from './ResultScreen.jsx'
 import GameOver from './GameOver.jsx'
 import { useNavigate } from "react-router";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { startQuiz, setCurrentQuote, submitAnswer, advanceQuote, resetQuiz } from './store/quizSlice';
 
 
-export default function Quiz ({totalQuotes}) {
+export default function Quiz ({totalQuotes, quizLength}) {
   // Get auth state from Redux
   const { isAuthenticated, userData } = useSelector(state => state.auth);
+  
+  // Get quiz state from Redux for specific quiz length
+  const quizState = useSelector(state => state.quiz[quizLength] || {});
+  const {
+    currentQuote,
+    currentChoices,
+    correctAnime,
+    currentScore,
+    currentQuoteNum,
+    submissionMade,
+    gameOver,
+    finalChoice,
+    quizInProgress
+  } = quizState;
+  
+  const dispatch = useDispatch();
+  let navigate = useNavigate();
 
   function shuffle(arr) {
     let array = arr;
@@ -22,42 +40,50 @@ export default function Quiz ({totalQuotes}) {
     return array
   }
 
-  // define the hooks
-  const [quote, setQuote] = useState(null);
-  const [correctAnime, setCorrectAnime] = useState(null);
-  const [choices, setChoices] = useState(null);
-  const [currQuoteNum, setNum] = useState(1);
- // const [quoteId, setQuoteId] = useState(null);
-  const [currScore, setScore] = useState(0);
-  const [submissionMade, setSubmissionMade] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
-  const [finalChoice, setFinalChoice] = useState(null);
-
-
   let currentChoice = null;
 
-  let navigate = useNavigate();
-
-  function noReload (ev) {
-
-    ev.preventDefault();
-    return ev.returnValue = 'Are you sure you want to close?';
+  // API wrapper function that works with Redux
+  function loadQuoteData() {
+    let quoteData = {};
+    
+    APICalls(
+      (quote) => {
+        quoteData.quote = quote;
+      },
+      (correctAnime) => {
+        quoteData.correctAnime = correctAnime;
+      },
+      (choices) => {
+        // Now we have all the data, dispatch to Redux
+        dispatch(setCurrentQuote({
+          quizLength,
+          quote: quoteData.quote,
+          correctAnime: quoteData.correctAnime,
+          choices: choices
+        }));
+      }
+    );
   }
+
 
   useEffect(() => {
 
-    // warns them about reloading
-    window.addEventListener("beforeunload", noReload);
-
-      // navigate them back to home if totalQuotes turns null from reloading
-      if (totalQuotes == null) {
+      // navigate them back to home if totalQuotes or quizLength is null from reloading
+      if (totalQuotes == null || quizLength == null) {
         navigate("/")
       }
 
-      // initial API call
-    APICalls(setQuote, setCorrectAnime, setChoices)
+      // Start quiz if not already in progress and not game over
+      if (!quizInProgress && !gameOver && totalQuotes) {
+        dispatch(startQuiz({ quizLength, totalQuotes }));
+      }
 
-  }, [navigate, totalQuotes])
+      // Load quote data if we don't have current quote data and quiz is in progress and not game over
+      if (!currentQuote && quizInProgress && !gameOver && totalQuotes) {
+        loadQuoteData();
+      }
+
+  }, [navigate, totalQuotes, quizLength, quizInProgress, currentQuote, gameOver, dispatch])
 
   function handleClick(animeName) {
     // Update their current choice
@@ -66,26 +92,16 @@ export default function Quiz ({totalQuotes}) {
 
   function resetQuote() {
     currentChoice = null
-    setQuote(null);
-    setCorrectAnime(null)
-    setChoices(null)
-    setSubmissionMade(false)
   }
 
-  function advanceQuote () {
-    if (currQuoteNum === totalQuotes) {
-      setGameOver(true)
-      console.log("this should start the game over screen")
-    } else {
-      let newQuoteNum = currQuoteNum + 1
-      setNum(newQuoteNum)
-      APICalls(setQuote, setCorrectAnime, setChoices)
-    }
+  function advanceToNextQuote () {
+    // Just dispatch the advance action - the useEffect will handle loading new data
+    dispatch(advanceQuote({ quizLength }));
   }
 
   function handleNextButton() {
     resetQuote()
-    advanceQuote()
+    advanceToNextQuote()
   }
 
   function handleSubmit() {
@@ -93,13 +109,7 @@ export default function Quiz ({totalQuotes}) {
     if (currentChoice == null) {
       alert(`Please select an anime first!`)
     } else {
-      setFinalChoice(currentChoice)
-      // update the score before rendering the results
-      if (currentChoice === correctAnime) {
-        let newScore = currScore + 1
-        setScore(newScore)
-      }
-      setSubmissionMade(true)
+      dispatch(submitAnswer({ quizLength, choice: currentChoice }));
     }
   }
 
@@ -108,10 +118,10 @@ export default function Quiz ({totalQuotes}) {
 
   <div id="hud">
       <div className="hud-item">
-        Quote {currQuoteNum}/{totalQuotes}
+        Quote {currentQuoteNum}/{totalQuotes}
       </div>
       <div className="hud-item">
-        Score: {currScore}
+        Score: {currentScore}
       </div>
     </div>
     {function(){
@@ -121,7 +131,7 @@ export default function Quiz ({totalQuotes}) {
         &quot;{
           function (){
             // can add loading icons in the future
-            let currQuote = quote || "Quote incoming...";
+            let currQuote = currentQuote || "Quote incoming...";
             return `${currQuote}`;
           }()
         }&quot;
@@ -133,19 +143,19 @@ export default function Quiz ({totalQuotes}) {
       {function (){
 
         if (gameOver) {
-          return <GameOver finalScore={currScore} noReload={noReload} />
+          return <GameOver finalScore={currentScore} quizLength={quizLength} />
         } else if(submissionMade && !gameOver) {
           return <ResultScreen animeChoice={finalChoice} correctAnime={correctAnime} handleNextButton={handleNextButton} loggedIn={isAuthenticated}/>
-        } else if (choices && quote) {
+        } else if (currentChoices && currentQuote) {
           return <div className="prompt">What anime is this from?</div>
-        } else if (quote && !choices) {
+        } else if (currentQuote && !currentChoices) {
           return "Choices incoming..."
         }
       }()}
       <div className="choices-container">
           {function (){
-            if (choices && !submissionMade) {
-              let animeArray = choices.slice();
+            if (currentChoices && !submissionMade) {
+              let animeArray = currentChoices.slice();
               console.log("This is correctAnime", correctAnime)
               animeArray.push(correctAnime);
               animeArray = shuffle(animeArray);
@@ -160,7 +170,7 @@ export default function Quiz ({totalQuotes}) {
       </div>
       {
         function (){
-          if (choices && !submissionMade){
+          if (currentChoices && !submissionMade){
             return <button className="advance-button" type="button" onClick={handleSubmit}>Submit</button>
           }
         }()
@@ -170,3 +180,4 @@ export default function Quiz ({totalQuotes}) {
 
   </>
 }
+
