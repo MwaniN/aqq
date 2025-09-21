@@ -29,8 +29,8 @@ export default function ProfilePage() {
         <div>Joined : {dateJoined.toDateString()}</div>
       </div>
       <div>
-        <div>View Bookmarked Quotes</div>
-        <div>Quote Cards Go Here</div>
+        <div>High Score</div>
+        <div>High score goes here</div>
       </div>
     </>
   )

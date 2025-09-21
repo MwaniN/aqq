@@ -46,7 +46,6 @@ export const initializeAuth = createAsyncThunk(
       
       // Store unsubscribe function globally for cleanup
       authUnsubscribe = unsubscribe
-      dispatch(setAuthUnsubscribe(unsubscribe))
     })
   }
 )
@@ -56,8 +55,7 @@ const initialState = {
   isAuthenticated: false,
   isLoading: true,
   userData: null,
-  authInitialized: false,
-  authUnsubscribe: null
+  authInitialized: false
 }
 
 const authSlice = createSlice({
@@ -84,9 +82,6 @@ const authSlice = createSlice({
         state.user = { ...state.user, token: action.payload }
       }
     },
-    setAuthUnsubscribe: (state, action) => {
-      state.authUnsubscribe = action.payload
-    },
     logout: (state) => {
       // Clean up auth listener
       if (authUnsubscribe) {
@@ -98,7 +93,6 @@ const authSlice = createSlice({
       state.isAuthenticated = false
       state.userData = null
       state.authInitialized = false
-      state.authUnsubscribe = null
       
       // Clear localStorage when logging out
       localStorage.removeItem('aqqUserInfo')
@@ -128,5 +122,5 @@ const authSlice = createSlice({
   }
 })
 
-export const { setUserData, updateTokenOnly, setAuthUnsubscribe, logout } = authSlice.actions
+export const { setUserData, updateTokenOnly, logout } = authSlice.actions
 export default authSlice.reducer
