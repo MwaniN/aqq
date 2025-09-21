@@ -2,41 +2,51 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '../auth/firebase.js'
 
+// Global variable to store the auth unsubscribe function
+let authUnsubscribe = null
+
 // Async thunk for Firebase authentication initialization
 export const initializeAuth = createAsyncThunk(
   'auth/initialize',
-  () => {
+  (_, { getState, dispatch }) => {
     return new Promise((resolve) => {
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
-        unsubscribe() // Unsubscribe immediately to prevent multiple calls
+      const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        const currentState = getState().auth
         
-        if (user) {
-          // User is logged in - get token and check localStorage for full user data
-          user.getIdToken().then((idToken) => {
-            // Check if we have full user data in localStorage
+        if (!currentState.authInitialized) {
+          // INITIAL AUTH CHECK - Only runs on app startup
+          if (user) {
+            const idToken = await user.getIdToken()
             const savedUserData = localStorage.getItem('aqqUserInfo')
+            
             if (savedUserData) {
               const parsedData = JSON.parse(savedUserData)
-              // Update token in case it changed
-              parsedData.token = idToken
+              parsedData.token = idToken // Update token
               localStorage.setItem('aqqUserInfo', JSON.stringify(parsedData))
-              resolve(parsedData)
+              resolve(parsedData) // Return full saved data
             } else {
-              // No saved data, create basic userData (will be updated when user logs in)
-              const userData = {
-                uid: user.uid,
-                email: user.email,
-                token: idToken
-              }
-              resolve(userData)
+              const userData = { uid: user.uid, email: user.email, token: idToken }
+              resolve(userData) // Return basic Firebase data
             }
-          })
-        } else {
-          // User is not logged in - clear localStorage
-          localStorage.removeItem('aqqUserInfo')
-          resolve(null)
+          } else {
+            resolve(null) // Not logged in
+          }
+        } else if (user && currentState.authInitialized) {
+          // TOKEN REFRESH - Only updates token, preserves user data
+          const idToken = await user.getIdToken()
+          const currentUserData = currentState.userData
+          
+          if (currentUserData) {
+            const updatedData = { ...currentUserData, token: idToken }
+            localStorage.setItem('aqqUserInfo', JSON.stringify(updatedData))
+            dispatch(updateTokenOnly(idToken))
+          }
         }
       })
+      
+      // Store unsubscribe function globally for cleanup
+      authUnsubscribe = unsubscribe
+      dispatch(setAuthUnsubscribe(unsubscribe))
     })
   }
 )
@@ -46,7 +56,8 @@ const initialState = {
   isAuthenticated: false,
   isLoading: true,
   userData: null,
-  authInitialized: false
+  authInitialized: false,
+  authUnsubscribe: null
 }
 
 const authSlice = createSlice({
@@ -66,10 +77,29 @@ const authSlice = createSlice({
         localStorage.removeItem('aqqUserInfo')
       }
     },
+    updateTokenOnly: (state, action) => {
+      // Only update the token, preserve all other user data
+      if (state.userData) {
+        state.userData.token = action.payload
+        state.user = { ...state.user, token: action.payload }
+      }
+    },
+    setAuthUnsubscribe: (state, action) => {
+      state.authUnsubscribe = action.payload
+    },
     logout: (state) => {
+      // Clean up auth listener
+      if (authUnsubscribe) {
+        authUnsubscribe()
+        authUnsubscribe = null
+      }
+      
       state.user = null
       state.isAuthenticated = false
       state.userData = null
+      state.authInitialized = false
+      state.authUnsubscribe = null
+      
       // Clear localStorage when logging out
       localStorage.removeItem('aqqUserInfo')
     }
@@ -98,5 +128,5 @@ const authSlice = createSlice({
   }
 })
 
-export const { setUserData, logout } = authSlice.actions
+export const { setUserData, updateTokenOnly, setAuthUnsubscribe, logout } = authSlice.actions
 export default authSlice.reducer
