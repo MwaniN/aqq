@@ -80,8 +80,8 @@ function App() {
               </ul>
             } else {
               return <ul>
-                <li><Link to="/login"><button type="button">Sign in</button></Link></li>
-                <li><Link to="/signup"><button type="button">Sign up</button></Link></li>
+                <li><Link to="/login"><button type="button">Sign In</button></Link></li>
+                <li><Link to="/signup"><button type="button">Sign Up</button></Link></li>
               </ul>
             }
           }()
