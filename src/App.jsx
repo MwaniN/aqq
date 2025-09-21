@@ -29,6 +29,28 @@ function App() {
     }
   }, [dispatch, authInitialized]);
 
+  // Utility function to handle return-to-location after login
+  const handleReturnAfterLogin = () => {
+    const returnLocation = localStorage.getItem('returnAfterLogin');
+    if (returnLocation) {
+      try {
+        const location = JSON.parse(returnLocation);
+        localStorage.removeItem('returnAfterLogin');
+        
+        // Check if the stored location is not too old (24 hours)
+        const isExpired = Date.now() - location.timestamp > 24 * 60 * 60 * 1000;
+        if (!isExpired) {
+          navigate(location.path + location.search);
+          return true;
+        }
+      } catch (error) {
+        console.log('Error parsing return location:', error);
+        localStorage.removeItem('returnAfterLogin');
+      }
+    }
+    return false;
+  };
+
   function handleLogout() {
     signOut(auth).then(() => {
       // Dispatch Redux logout action
@@ -57,7 +79,10 @@ function App() {
                 <li><button type="button" onClick={() => handleLogout()}>Sign out</button></li>
               </ul>
             } else {
-              return <li><Link to="/login"><button type="button">Sign in</button></Link></li>
+              return <ul>
+                <li><Link to="/login"><button type="button">Sign in</button></Link></li>
+                <li><Link to="/signup"><button type="button">Sign up</button></Link></li>
+              </ul>
             }
           }()
         }

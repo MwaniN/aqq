@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { useState, useEffect } from 'react'
+import { signInWithEmailAndPassword, signInWithRedirect, getRedirectResult } from 'firebase/auth';
 import { auth, googleProvider } from './firebase.js';
-import { NavLink, useNavigate } from 'react-router';
+import { NavLink, useNavigate, useSearchParams } from 'react-router';
 import GoogleButton from 'react-google-button';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
@@ -9,12 +9,87 @@ import { setUserData } from '../store/authSlice';
 
 export default function LogIn() {
   const dispatch = useDispatch();
-
-
-
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [justSignedUp, setJustSignedUp] = useState(false);
+
+  // Check if user just signed up and handle location storage
+  useEffect(() => {
+    const justSignedUpParam = searchParams.get('justSignedUp') === 'true';
+    setJustSignedUp(justSignedUpParam);
+    
+    if (justSignedUpParam) {
+      // User just signed up - use the original location from signup
+      const originalLocation = localStorage.getItem('originalLocationBeforeSignup');
+      if (originalLocation) {
+        localStorage.setItem('returnAfterLogin', originalLocation);
+        localStorage.removeItem('originalLocationBeforeSignup');
+      }
+    } else {
+      // Normal login flow - store current location
+      const returnLocation = {
+        path: window.location.pathname,
+        search: window.location.search,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('returnAfterLogin', JSON.stringify(returnLocation));
+    }
+  }, [searchParams]);
+
+  // Handle Google sign-in redirect result
+  useEffect(() => {
+    getRedirectResult(auth).then((result) => {
+      if (result) {
+        // User signed in via redirect
+        result.user.getIdToken().then((idToken) => {
+          axios({
+            method: 'POST',
+            url: 'http://localhost:3000/login',
+            headers: {
+              'Authorization': `Bearer ${idToken}`
+            }
+          })
+          .then((response) => {
+            console.log(response.data, " This is the data response from the server")
+            let userStuff = response.data
+            userStuff['token'] = idToken;
+            dispatch(setUserData(userStuff))
+            
+            // Return to original location or home
+            const returnLocation = localStorage.getItem('returnAfterLogin');
+            if (returnLocation) {
+              try {
+                const location = JSON.parse(returnLocation);
+                localStorage.removeItem('returnAfterLogin');
+                
+                // Check if the stored location is not too old (24 hours)
+                const isExpired = Date.now() - location.timestamp > 24 * 60 * 60 * 1000;
+                if (!isExpired) {
+                  navigate(location.path + location.search);
+                } else {
+                  navigate('/');
+                }
+              } catch (error) {
+                console.log('Error parsing return location:', error);
+                localStorage.removeItem('returnAfterLogin');
+                navigate('/');
+              }
+            } else {
+              navigate('/');
+            }
+          })
+          .catch((error) => {
+            console.log('Error after redirect:', error);
+            navigate('/');
+          });
+        });
+      }
+    }).catch((error) => {
+      console.log('Redirect result error:', error);
+    });
+  }, [dispatch, navigate]);
 
   const onLogin = (e) => {
     e.preventDefault();
@@ -36,7 +111,29 @@ export default function LogIn() {
                   userStuff['token'] = idToken;
                   // Dispatch Redux action instead of calling saveUserData prop
                   dispatch(setUserData(userStuff))
-                  navigate("/")
+                  
+                  // Return to original location or home
+                  const returnLocation = localStorage.getItem('returnAfterLogin');
+                  if (returnLocation) {
+                    try {
+                      const location = JSON.parse(returnLocation);
+                      localStorage.removeItem('returnAfterLogin');
+                      
+                      // Check if the stored location is not too old (24 hours)
+                      const isExpired = Date.now() - location.timestamp > 24 * 60 * 60 * 1000;
+                      if (!isExpired) {
+                        navigate(location.path + location.search);
+                      } else {
+                        navigate('/');
+                      }
+                    } catch (error) {
+                      console.log('Error parsing return location:', error);
+                      localStorage.removeItem('returnAfterLogin');
+                      navigate('/');
+                    }
+                  } else {
+                    navigate('/');
+                  }
                 });
         })
     })
@@ -49,33 +146,22 @@ export default function LogIn() {
 }
 
 function GoogleSignIn() {
-    signInWithPopup(auth, googleProvider).then((userCredential) => {
-         // Signed in
-         userCredential.user.getIdToken().then(function (idToken){
-             // set default idToken for API calls and log in with token from the backend
-
-             axios.defaults.headers.common['Authorization'] = 'Bearer ' + idToken;
-
-             axios({
-                 method: 'POST',
-                 url: 'http://localhost:3000/login'
-               })
-                 .then(function (response) {
-                    console.log(response.data, " This is the data response from the server")
-                    let userStuff = response.data
-                    userStuff['token'] = idToken;
-                    // Dispatch Redux action instead of calling saveUserData prop
-                    dispatch(setUserData(userStuff))
-                    navigate("/")
-                 });
-         })
-    }
-    ).catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage)
-    })
-    };
+  // Store current location before redirect
+  const returnLocation = {
+    path: window.location.pathname,
+    search: window.location.search,
+    timestamp: Date.now()
+  };
+  
+  localStorage.setItem('returnAfterLogin', JSON.stringify(returnLocation));
+  
+  // Redirect to Google sign-in
+  signInWithRedirect(auth, googleProvider).catch((error) => {
+    console.log('Redirect error:', error);
+    // Clean up stored location on error
+    localStorage.removeItem('returnAfterLogin');
+  });
+};
 
   return (
     <>
@@ -83,6 +169,19 @@ function GoogleSignIn() {
             <section>
                 <div>
                     <p> FocusApp </p>
+                    
+                    {justSignedUp && (
+                        <div style={{ 
+                            backgroundColor: '#d4edda', 
+                            color: '#155724', 
+                            padding: '10px', 
+                            borderRadius: '4px', 
+                            marginBottom: '20px',
+                            border: '1px solid #c3e6cb'
+                        }}>
+                            ✅ Account created successfully! Please sign in to continue.
+                        </div>
+                    )}
 
                     <form>
                         <div>
@@ -122,8 +221,12 @@ function GoogleSignIn() {
                         </div>
                     </form>
 
-                    <div>OR</div>
-                    <GoogleButton onClick={() => {GoogleSignIn()}} />
+                    {!justSignedUp && (
+                        <>
+                            <div>OR</div>
+                            <GoogleButton onClick={() => {GoogleSignIn()}} />
+                        </>
+                    )}
 
                     <p className="text-sm text-white text-center">
                         No account yet? {' '}
