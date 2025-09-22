@@ -55,6 +55,21 @@ function App() {
   useEffect(() => {
     console.log('App: Redirect useEffect running - checking dependencies:', { dispatch, navigate });
     
+    // Display stored Google sign-in logs for debugging
+    const storedLogs = localStorage.getItem('googleSignInLogs');
+    if (storedLogs) {
+      console.log('=== STORED GOOGLE SIGN-IN LOGS ===');
+      const logs = JSON.parse(storedLogs);
+      console.log(`Total logs: ${logs.length}`);
+      logs.forEach((log, index) => {
+        console.log(`[${index}] [${log.timestamp}] ${log.message}`, log.data);
+      });
+      console.log('=== END STORED LOGS ===');
+      
+      // Clear old logs to avoid confusion
+      localStorage.removeItem('googleSignInLogs');
+    }
+    
     const handleRedirectResult = async () => {
       try {
         // Check if we're coming from a redirect by looking at the URL
@@ -62,6 +77,7 @@ function App() {
         const hasRedirectParams = urlParams.has('code') || urlParams.has('state') || urlParams.has('error');
         console.log('App: URL params:', Object.fromEntries(urlParams.entries()));
         console.log('App: Has redirect params?', hasRedirectParams);
+        console.log('App: Current URL:', window.location.href);
         
         // Add a small delay to ensure redirect is fully processed
         await new Promise(resolve => setTimeout(resolve, 100));

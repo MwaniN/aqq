@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { signInWithEmailAndPassword, signInWithRedirect } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithRedirect, signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from './firebase.js';
 import { NavLink, useNavigate, useSearchParams } from 'react-router';
 import GoogleButton from 'react-google-button';
@@ -94,9 +94,22 @@ export default function LogIn() {
 }
 
 function GoogleSignIn() {
-  console.log('GoogleSignIn function called');
-  console.log('Auth instance:', auth);
-  console.log('Google provider:', googleProvider);
+  // Initialize logs array
+  let logs = JSON.parse(localStorage.getItem('googleSignInLogs') || '[]');
+  
+  const log = (message, data = null) => {
+    const logEntry = { message, data, timestamp: new Date().toISOString() };
+    logs.push(logEntry);
+    console.log(message, data);
+    // Immediately save to localStorage
+    localStorage.setItem('googleSignInLogs', JSON.stringify(logs));
+  };
+
+  log('GoogleSignIn function called');
+  log('Auth instance:', auth);
+  log('Google provider:', googleProvider);
+  log('Current URL:', window.location.href);
+  log('Current origin:', window.location.origin);
   
   // Store current location before redirect
   const returnLocation = {
@@ -106,20 +119,99 @@ function GoogleSignIn() {
   };
 
   localStorage.setItem('returnAfterLogin', JSON.stringify(returnLocation));
-  console.log('Stored return location:', returnLocation);
+  log('Stored return location:', returnLocation);
   
-  // Redirect to Google sign-in
-  console.log('Starting Google sign-in redirect...');
-  signInWithRedirect(auth, googleProvider)
-    .then(() => {
-      console.log('signInWithRedirect promise resolved - redirect should be happening');
-    })
-    .catch((error) => {
-      console.log('Redirect error:', error);
-      console.error('Full error details:', error);
-      // Clean up stored location on error
-      localStorage.removeItem('returnAfterLogin');
-    });
+  // Try popup first as a workaround for localhost redirect issues
+  log('Starting Google sign-in with popup (redirect fallback)...');
+  
+  try {
+    log('About to call signInWithPopup...');
+    const popupPromise = signInWithPopup(auth, googleProvider);
+    log('signInWithPopup called, promise created');
+    
+    popupPromise
+      .then(async (result) => {
+        log('Popup sign-in successful:', result);
+        
+        // Process the result immediately
+        const idToken = await result.user.getIdToken();
+        log('Got ID token from popup:', idToken);
+        
+        // Call backend to get user data
+        const response = await axios({
+          method: 'POST',
+          url: 'http://localhost:3000/login',
+          headers: {
+            'Authorization': `Bearer ${idToken}`
+          }
+        });
+        
+        log('Backend response:', response.data);
+        const userData = { ...response.data, token: idToken };
+        
+        // Save to localStorage
+        localStorage.setItem('aqqUserInfo', JSON.stringify(userData));
+        log('Saved user data to localStorage:', userData);
+        
+        // Dispatch to update Redux state
+        dispatch(setUserData(userData));
+        log('Dispatched setUserData to Redux');
+        
+        // Check Redux state after dispatch
+        setTimeout(() => {
+          const currentState = JSON.parse(localStorage.getItem('aqqUserInfo') || 'null');
+          log('Current Redux state check:', currentState);
+        }, 100);
+        
+        // Handle navigation
+        log('Starting navigation logic...');
+        const returnLocation = localStorage.getItem('returnAfterLogin');
+        log('Return location from localStorage:', returnLocation);
+        
+        if (returnLocation) {
+          try {
+            const location = JSON.parse(returnLocation);
+            log('Parsed return location:', location);
+            localStorage.removeItem('returnAfterLogin');
+            
+            // Check if the stored location is not too old (24 hours)
+            const isExpired = Date.now() - location.timestamp > 24 * 60 * 60 * 1000;
+            log('Location expired?', isExpired);
+            
+            if (!isExpired && location.path !== '/login') {
+              // Only navigate to the stored location if it's not the login page
+              log('Navigating to:', location.path + location.search);
+              navigate(location.path + location.search);
+            } else {
+              // If expired or trying to go back to login page, go to home instead
+              log('Location expired or is login page, navigating to home');
+              navigate('/');
+            }
+          } catch (error) {
+            log('Error parsing return location:', error);
+            localStorage.removeItem('returnAfterLogin');
+            log('Navigating to home due to parse error');
+            navigate('/');
+          }
+        } else {
+          log('No return location, navigating to home');
+          navigate('/');
+        }
+      })
+      .catch((error) => {
+        log('Popup sign-in error:', error);
+        log('Full error details:', error);
+        
+        // If popup fails, try redirect as fallback
+        log('Popup failed, trying redirect as fallback...');
+        signInWithRedirect(auth, googleProvider).catch((redirectError) => {
+          log('Redirect fallback also failed:', redirectError);
+          localStorage.removeItem('returnAfterLogin');
+        });
+      });
+  } catch (error) {
+    log('Exception during signInWithPopup:', error);
+  }
 };
 
   return (
