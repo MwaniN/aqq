@@ -180,6 +180,19 @@ function App() {
     })
   }
 
+  function handleSignInClick() {
+    // Capture current location before navigating to login
+    const returnLocation = {
+      path: window.location.pathname,
+      search: window.location.search,
+      timestamp: Date.now()
+    };
+    localStorage.setItem('returnAfterLogin', JSON.stringify(returnLocation));
+    
+    // Navigate to login page
+    navigate('/login');
+  }
+
 
   return (
     <>
@@ -198,7 +211,7 @@ function App() {
               </ul>
             } else {
               return <ul>
-                <li><Link to="/login"><button type="button">Sign In</button></Link></li>
+                <li><button type="button" onClick={handleSignInClick}>Sign In</button></li>
                 <li><Link to="/signup"><button type="button">Sign Up</button></Link></li>
               </ul>
             }

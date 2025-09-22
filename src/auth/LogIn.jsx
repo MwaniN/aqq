@@ -27,15 +27,8 @@ export default function LogIn() {
         localStorage.setItem('returnAfterLogin', originalLocation);
         localStorage.removeItem('originalLocationBeforeSignup');
       }
-    } else {
-      // Normal login flow - store current location
-      const returnLocation = {
-        path: window.location.pathname,
-        search: window.location.search,
-        timestamp: Date.now()
-      };
-      localStorage.setItem('returnAfterLogin', JSON.stringify(returnLocation));
     }
+    // Note: Location capture is now handled in App.jsx handleSignInClick()
   }, [searchParams]);
 
 
@@ -111,15 +104,8 @@ function GoogleSignIn() {
   log('Current URL:', window.location.href);
   log('Current origin:', window.location.origin);
   
-  // Store current location before redirect
-  const returnLocation = {
-    path: window.location.pathname,
-    search: window.location.search,
-    timestamp: Date.now()
-  };
-
-  localStorage.setItem('returnAfterLogin', JSON.stringify(returnLocation));
-  log('Stored return location:', returnLocation);
+  // Note: Location capture is now handled in App.jsx handleSignInClick()
+  // The return location should already be stored when user clicked "Sign In"
   
   // Try popup first as a workaround for localhost redirect issues
   log('Starting Google sign-in with popup (redirect fallback)...');
