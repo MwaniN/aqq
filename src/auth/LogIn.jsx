@@ -6,6 +6,7 @@ import GoogleButton from 'react-google-button';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setUserData } from '../store/authSlice';
+import { loadQuizFromStorage } from '../store/quizSlice';
 
 export default function LogIn() {
   const dispatch = useDispatch();
@@ -14,6 +15,26 @@ export default function LogIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [justSignedUp, setJustSignedUp] = useState(false);
+
+  // Function to restore app state after authentication
+  function restoreAppState(appState) {
+    try {
+      // Restore quiz state for each quiz length
+      if (appState.quiz) {
+        Object.keys(appState.quiz).forEach(quizLength => {
+          const quizState = appState.quiz[quizLength];
+          if (quizState && (quizState.quizInProgress || quizState.currentQuote)) {
+            dispatch(loadQuizFromStorage({ 
+              quizLength, 
+              savedState: quizState 
+            }));
+          }
+        });
+      }
+    } catch (error) {
+      console.log('Error restoring app state:', error);
+    }
+  }
 
   // Check if user just signed up and handle location storage
   useEffect(() => {
@@ -63,6 +84,10 @@ export default function LogIn() {
                       // Check if the stored location is not too old (24 hours)
                       const isExpired = Date.now() - location.timestamp > 24 * 60 * 60 * 1000;
                       if (!isExpired) {
+                        // Restore app state if available
+                        if (location.appState) {
+                          restoreAppState(location.appState);
+                        }
                         navigate(location.path + location.search);
                       } else {
                         navigate('/');
@@ -165,6 +190,12 @@ function GoogleSignIn() {
             log('Location expired?', isExpired);
             
             if (!isExpired && location.path !== '/login') {
+              // Restore app state if available
+              if (location.appState) {
+                log('Restoring app state:', location.appState);
+                restoreAppState(location.appState);
+              }
+              
               // Only navigate to the stored location if it's not the login page
               log('Navigating to:', location.path + location.search);
               navigate(location.path + location.search);
@@ -188,12 +219,23 @@ function GoogleSignIn() {
         log('Popup sign-in error:', error);
         log('Full error details:', error);
         
-        // If popup fails, try redirect as fallback
-        log('Popup failed, trying redirect as fallback...');
-        signInWithRedirect(auth, googleProvider).catch((redirectError) => {
-          log('Redirect fallback also failed:', redirectError);
+        // Check if this is a user cancellation vs technical failure
+        const isUserCancellation = error.code === 'auth/cancelled-popup-request' || 
+                                  error.code === 'auth/popup-closed-by-user' ||
+                                  error.message?.includes('popup') && error.message?.includes('closed');
+        
+        if (isUserCancellation) {
+          log('User cancelled popup, not attempting redirect fallback');
+          // Clean up the return location since user cancelled
           localStorage.removeItem('returnAfterLogin');
-        });
+        } else {
+          // Only try redirect fallback for technical failures
+          log('Technical popup failure, trying redirect as fallback...');
+          signInWithRedirect(auth, googleProvider).catch((redirectError) => {
+            log('Redirect fallback also failed:', redirectError);
+            localStorage.removeItem('returnAfterLogin');
+          });
+        }
       });
   } catch (error) {
     log('Exception during signInWithPopup:', error);

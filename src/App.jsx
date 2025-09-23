@@ -11,6 +11,7 @@ import ProfilePage from './ProfilePage.jsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { initializeAuth, logout } from './store/authSlice';
 import { loadQuizFromStorage } from './store/quizSlice';
+import { store } from './store/store';
 import { getRedirectResult } from 'firebase/auth';
 import axios from 'axios';
 import { setUserData } from './store/authSlice';
@@ -181,11 +182,21 @@ function App() {
   }
 
   function handleSignInClick() {
-    // Capture current location before navigating to login
+    // Get current Redux state
+    const currentState = store.getState();
+    
+    // Capture current location and app state before navigating to login
     const returnLocation = {
       path: window.location.pathname,
       search: window.location.search,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      appState: {
+        quiz: currentState.quiz,
+        auth: {
+          isAuthenticated: currentState.auth.isAuthenticated,
+          userData: currentState.auth.userData
+        }
+      }
     };
     localStorage.setItem('returnAfterLogin', JSON.stringify(returnLocation));
     
