@@ -42,7 +42,7 @@ export default function GameOver({finalScore, quizLength}) {
     return () => {
       dispatch(resetQuiz({ quizLength }));
     };
-  }, [dispatch, isAuthenticated, userData, finalScore])
+  }, [dispatch, isAuthenticated, quizLength])
 
   let endingArr = [`You are a regular savant.`, `You went full Super Saiyan.`, `Good job.`, `Nice.`]
 

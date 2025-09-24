@@ -68,6 +68,11 @@ export default function Quiz ({totalQuotes, quizLength}) {
 
   useEffect(() => {
 
+      // Don't do anything if game is over
+      if (gameOver) {
+        return;
+      }
+
       // navigate them back to home if totalQuotes or quizLength is null from reloading
       if (totalQuotes == null || quizLength == null) {
         navigate("/")
