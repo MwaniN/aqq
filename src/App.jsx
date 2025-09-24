@@ -217,7 +217,7 @@ function App() {
           function (){
             if (isAuthenticated && userData) {
               return <ul>
-                <li>User : {userData.email}</li>
+                <li><Link to="/profile"><button type="button">Profile</button></Link></li>
                 <li><button type="button" onClick={() => handleLogout()}>Sign out</button></li>
               </ul>
             } else {
