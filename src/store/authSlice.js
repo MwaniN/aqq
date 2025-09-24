@@ -82,6 +82,22 @@ const authSlice = createSlice({
         state.user = { ...state.user, token: action.payload }
       }
     },
+    updateUserStats: (state, action) => {
+      // Update specific user stats after game completion
+      const { gameType, highScore, gamesPlayed, totalGamesPlayed } = action.payload
+      if (state.userData) {
+        // Update the specific game type stats
+        state.userData[`high_score_${gameType}`] = highScore
+        state.userData[`games_played_${gameType}`] = gamesPlayed
+        state.userData.total_games_played = totalGamesPlayed
+        
+        // Update the user object as well
+        state.user = { ...state.user, ...state.userData }
+        
+        // Save to localStorage
+        localStorage.setItem('aqqUserInfo', JSON.stringify(state.userData))
+      }
+    },
     logout: (state) => {
       // Clean up auth listener
       if (authUnsubscribe) {
@@ -126,5 +142,5 @@ const authSlice = createSlice({
   }
 })
 
-export const { setUserData, updateTokenOnly, logout } = authSlice.actions
+export const { setUserData, updateTokenOnly, updateUserStats, logout } = authSlice.actions
 export default authSlice.reducer

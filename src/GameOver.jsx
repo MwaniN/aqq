@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { resetQuiz } from './store/quizSlice';
+import { updateUserStats } from './store/authSlice';
 
 export default function GameOver({finalScore, quizLength}) {
   // Get auth state from Redux
@@ -13,7 +14,10 @@ export default function GameOver({finalScore, quizLength}) {
 
     if (isAuthenticated && userData && userData.token) {
 
-      let scoreUpdate = {score: finalScore}
+      let scoreUpdate = {
+        score: finalScore,
+        gameType: quizLength.toString() // Convert quizLength to string ('5', '10', or '15')
+      }
       axios.put('http://localhost:3000/update_stats', scoreUpdate, {
         headers: {
           'Authorization': `Bearer ${userData.token}`
@@ -21,6 +25,14 @@ export default function GameOver({finalScore, quizLength}) {
       }).then((response) =>
       {
         console.log(response)
+        // Update Redux state with the returned stats
+        const { high_score, games_played, total_games_played, game_type } = response.data
+        dispatch(updateUserStats({
+          gameType: game_type,
+          highScore: high_score,
+          gamesPlayed: games_played,
+          totalGamesPlayed: total_games_played
+        }))
       }).catch((error) => {
         console.log(error)
       })
