@@ -20,6 +20,7 @@ export default function ProfilePage() {
   // User is authenticated, show profile
   let email = userData.email || ""
   let dateJoined = userData.date_joined ? new Date(Number(userData.date_joined)) : new Date()
+  let highScore = userData.high_score || 0
 
   return (
     <>
@@ -30,7 +31,7 @@ export default function ProfilePage() {
       </div>
       <div>
         <div>High Score</div>
-        <div>High score goes here</div>
+        <div>{highScore}</div>
       </div>
     </>
   )
