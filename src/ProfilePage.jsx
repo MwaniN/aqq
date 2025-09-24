@@ -41,19 +41,19 @@ export default function ProfilePage() {
       
       <div className="game-stats">
         <div className="stat-section">
-          <h3>5 Question Games</h3>
+          <h3>5 Quotes</h3>
           <div>High Score: {highScore5}</div>
           <div>Games Played: {gamesPlayed5}</div>
         </div>
         
         <div className="stat-section">
-          <h3>10 Question Games</h3>
+          <h3>10 Quotes</h3>
           <div>High Score: {highScore10}</div>
           <div>Games Played: {gamesPlayed10}</div>
         </div>
         
         <div className="stat-section">
-          <h3>15 Question Games</h3>
+          <h3>15 Quotes</h3>
           <div>High Score: {highScore15}</div>
           <div>Games Played: {gamesPlayed15}</div>
         </div>
