@@ -20,7 +20,15 @@ export default function ProfilePage() {
   // User is authenticated, show profile
   let email = userData.email || ""
   let dateJoined = userData.date_joined ? new Date(Number(userData.date_joined)) : new Date()
-  let highScore = userData.high_score || 0
+  let totalGamesPlayed = userData.total_games_played || 0
+
+  // Game-specific stats
+  let highScore5 = userData.high_score_5 || 0
+  let highScore10 = userData.high_score_10 || 0
+  let highScore15 = userData.high_score_15 || 0
+  let gamesPlayed5 = userData.games_played_5 || 0
+  let gamesPlayed10 = userData.games_played_10 || 0
+  let gamesPlayed15 = userData.games_played_15 || 0
 
   return (
     <>
@@ -28,10 +36,27 @@ export default function ProfilePage() {
       <div className="stats">
         <div>User : {email}</div>
         <div>Joined : {dateJoined.toDateString()}</div>
+        <div>Total Games Played : {totalGamesPlayed}</div>
       </div>
-      <div>
-        <div>High Score</div>
-        <div>{highScore}</div>
+      
+      <div className="game-stats">
+        <div className="stat-section">
+          <h3>5 Question Games</h3>
+          <div>High Score: {highScore5}</div>
+          <div>Games Played: {gamesPlayed5}</div>
+        </div>
+        
+        <div className="stat-section">
+          <h3>10 Question Games</h3>
+          <div>High Score: {highScore10}</div>
+          <div>Games Played: {gamesPlayed10}</div>
+        </div>
+        
+        <div className="stat-section">
+          <h3>15 Question Games</h3>
+          <div>High Score: {highScore15}</div>
+          <div>Games Played: {gamesPlayed15}</div>
+        </div>
       </div>
     </>
   )
