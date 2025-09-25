@@ -44,30 +44,64 @@ export default function GameOver({finalScore, quizLength}) {
     };
   }, [dispatch, isAuthenticated, quizLength])
 
-  let endingArr = [`You are a regular savant.`, `You went full Super Saiyan.`, `Good job.`, `Nice.`]
-
-  function randomIntFromInterval(min, max) { // min and max included
-    return Math.floor(Math.random() * (max - min + 1) + min);
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i >= 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
   }
 
-  let rndInt = randomIntFromInterval(0, endingArr.length - 1);
+  // Messages for 0 correct
+  const zeroCorrectMessages = [
+    "🎯 Every expert was once a beginner. You're just getting started!",
+    "🌟 Don't worry! These quotes are really tricky - even anime fans struggle with them!",
+    "💪 That was tough! These are some of the hardest anime quotes around!",
+    "🎊 No worries! You're building your anime quote knowledge - keep going!",
+    "🔥 These quotes are super obscure! You're learning as you go!"
+  ];
 
-  let finalQuote = endingArr[rndInt]
+  // Messages for 1+ correct (mix of new + original)
+  const onePlusCorrectMessages = [
+    "🎉 Great job! You got " + finalScore + " correct!",
+    "🌟 Nice work! " + finalScore + " out of " + quizLength + " - that's solid!",
+    "🎊 Well done! You got " + finalScore + " right!",
+    "⭐ Good effort! " + finalScore + " correct answers!",
+    "🔥 Nice! You got " + finalScore + " out of " + quizLength + "!",
+    "💪 Great attempt! You got " + finalScore + " correct!",
+    "🎊 Awesome! You got " + finalScore + " right!",
+    "🏆 Excellent! " + finalScore + " out of " + quizLength + " correct!",
+    "You are a regular savant.",
+    "You went full Super Saiyan.",
+    "Good job.",
+    "Nice."
+  ];
+
+  // Messages for perfect score
+  const perfectScoreMessages = [
+    "🏆 Flawless Victory! You're an anime legend!",
+    "🌟 Perfect Score! You're a true anime quote master!",
+    "🎉 100%! Incredible work!",
+    "💯 Perfect! You nailed every single one!"
+  ];
+
+  // Select appropriate message array and randomize
+  let messageArray;
+  if (finalScore === 0) {
+    messageArray = zeroCorrectMessages;
+  } else if (finalScore === parseInt(quizLength)) {
+    messageArray = perfectScoreMessages;
+  } else {
+    messageArray = onePlusCorrectMessages;
+  }
+
+  shuffleArray(messageArray);
+  let finalQuote = messageArray[0];
 
 
   return (
     <>
     <div>
-      {
-        function(){
-
-          if (finalScore > 0) {
-            return <div>{`Congratulations! You got ${finalScore} correct. ${finalQuote}`}</div>
-          } else {
-            return <div>Better luck next time! You got 0 correct.</div>
-          }
-        }()
-      }
+      {finalQuote}
     </div>
     <Link to="/"><button type="button" className="advance-button">Return Home</button></Link>
     </>
