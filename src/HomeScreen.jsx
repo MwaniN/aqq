@@ -16,7 +16,7 @@ export default function HomeScreen({setQuoteNum, setQuizLength}) {
 
   return <>
   <div>Test Your Anime Knowledge!</div>
-  <div>Pick Your Challenge:</div>
+  <div>Choose Your Path</div>
   <div>Quick</div>
   <div>5 Quotes</div>
   <Link to="/Quiz"><button onClick={() => { setQuoteNum(5); setQuizLength('5'); }}>{getButtonText('5')}</button></Link>
