@@ -133,7 +133,7 @@ export default function SignUp() {
     <section>
         <div>
             <div>
-                <h1> FocusApp </h1>
+                <h1> Anime Quote Quiz </h1>
                 <form>
                     <div>
                         <label htmlFor="email-address">

@@ -247,7 +247,7 @@ function GoogleSignIn() {
         <main >
             <section>
                 <div>
-                    <p> FocusApp </p>
+                    <p> Anime Quote Quiz </p>
                     
                     {justSignedUp && (
                         <div style={{ 
