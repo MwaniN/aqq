@@ -70,10 +70,10 @@ export default function GameOver({finalScore, quizLength}) {
     "💪 Great attempt! You got " + finalScore + " correct!",
     "🎊 Awesome! You got " + finalScore + " right!",
     "🏆 Excellent! " + finalScore + " out of " + quizLength + " correct!",
-    "You are a regular savant.",
-    "You went full Super Saiyan.",
-    "Good job.",
-    "Nice."
+    "You got " + finalScore + " out of " + quizLength + " correct! You are a regular savant.",
+    "You got " + finalScore + " out of " + quizLength + " right! You went full Super Saiyan.",
+    "You got " + finalScore + " correct! Good job.",
+    "You got " + finalScore + " out of " + quizLength + " correct! Nice."
   ];
 
   // Messages for perfect score

@@ -20,20 +20,20 @@ export default function Result ({animeChoice, correctAnime, handleNextButton, lo
   const resultMessage = useMemo(() => {
     // Success messages (all mentioning anime name)
     const successMessages = [
-      "🎉 Perfect! That's from " + correctAnime,
-      "🎯 Excellent! You nailed it! That's from " + correctAnime,
-      "⭐ Great catch! That's from " + correctAnime,
-      "🔥 Amazing! You got it right! That's from " + correctAnime,
-      "💯 Spot on! That's from " + correctAnime
+      "🎉 Perfect! That's from " + correctAnime + ".",
+      "🎯 Excellent! You nailed it! That's from " + correctAnime + ".",
+      "⭐ Great catch! That's from " + correctAnime + ".",
+      "🔥 Amazing! You got it right! That's from " + correctAnime + ".",
+      "💯 Spot on! That's from " + correctAnime + "."
     ];
 
     // Failure messages (all mentioning anime name)
     const failureMessages = [
-      "❌ Close! The correct answer was " + correctAnime,
-      "🤔 Not quite! It's from " + correctAnime,
-      "💭 That's a tricky one! The answer is " + correctAnime,
-      "👍 Good try! The correct answer was " + correctAnime,
-      "🤷‍♂️ Not this time! It's from " + correctAnime
+      "❌ Close! The correct answer was " + correctAnime + ".",
+      "🤔 Not quite! It's from " + correctAnime + ".",
+      "💭 That's a tricky one! The answer is " + correctAnime + ".",
+      "👍 Good try! The correct answer was " + correctAnime + ".",
+      "🤷‍♂️ Not this time! It's from " + correctAnime + "."
     ];
 
     // Success encouragement messages
@@ -44,19 +44,8 @@ export default function Result ({animeChoice, correctAnime, handleNextButton, lo
       "Nice work!",
       "Excellent!",
       "Well done!",
-      "Perfect!",
+      "Fantastic!",
       "Outstanding!"
-    ];
-
-    // Failure encouragement messages
-    const failureEncouragement = [
-      "Don't worry, that's a hard one!",
-      "Even experts miss that one sometimes!",
-      "That's a really obscure reference!",
-      "Nice try!",
-      "That was tricky!",
-      "No worries, keep going!",
-      "You'll get the next one!"
     ];
 
     // Only shuffle the arrays we need
@@ -66,8 +55,7 @@ export default function Result ({animeChoice, correctAnime, handleNextButton, lo
       return successMessages[0] + " " + successEncouragement[0];
     } else {
       shuffleArray(failureMessages);
-      shuffleArray(failureEncouragement);
-      return failureMessages[0] + " " + failureEncouragement[0];
+      return failureMessages[0];
     }
   }, [isRight, correctAnime]);
 
