@@ -217,7 +217,7 @@ function App() {
           function (){
             if (isAuthenticated && userData) {
               return <ul>
-                <li><Link to="/profile"><button type="button">Profile</button></Link></li>
+                <li><Link to="/profile"><button type="button">Stats</button></Link></li>
                 <li><button type="button" onClick={() => handleLogout()}>Sign out</button></li>
               </ul>
             } else {

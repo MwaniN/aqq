@@ -32,29 +32,28 @@ export default function ProfilePage() {
 
   return (
     <>
-      <div>Profile</div>
+      <div>Your Anime Quote Journey</div>
       <div className="stats">
-        <div>User : {email}</div>
-        <div>Joined : {dateJoined.toDateString()}</div>
-        <div>Total Games Played : {totalGamesPlayed}</div>
+        <div>Member since {dateJoined.toDateString()}</div>
+        <div>Games Completed: {totalGamesPlayed}</div>
       </div>
       
       <div className="game-stats">
         <div className="stat-section">
-          <h3>5 Quotes</h3>
-          <div>High Score: {highScore5}</div>
+          <h3>Quick (5 Quotes)</h3>
+          <div>Personal Best: {highScore5}</div>
           <div>Games Played: {gamesPlayed5}</div>
         </div>
         
         <div className="stat-section">
-          <h3>10 Quotes</h3>
-          <div>High Score: {highScore10}</div>
+          <h3>Extended (10 Quotes)</h3>
+          <div>Personal Best: {highScore10}</div>
           <div>Games Played: {gamesPlayed10}</div>
         </div>
         
         <div className="stat-section">
-          <h3>15 Quotes</h3>
-          <div>High Score: {highScore15}</div>
+          <h3>Ultimate (15 Quotes)</h3>
+          <div>Personal Best: {highScore15}</div>
           <div>Games Played: {gamesPlayed15}</div>
         </div>
       </div>
