@@ -73,10 +73,12 @@ export default function Quiz ({totalQuotes, quizLength}) {
         return;
       }
 
-      // navigate them back to home if totalQuotes or quizLength is null from reloading
-      if (totalQuotes == null || quizLength == null) {
-        navigate("/")
-      }
+      // TODO: This navigation logic should be unnecessary now that we have proper state persistence
+      // and the HomeScreen handles showing "Resume" buttons for active quizzes. However, keeping
+      // it commented out as a safety measure in case there are edge cases we haven't considered.
+      // if (totalQuotes == null || quizLength == null) {
+      //   navigate("/")
+      // }
 
       // Start quiz if not already in progress and not game over
       if (!quizInProgress && !gameOver && totalQuotes) {
