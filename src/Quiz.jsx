@@ -136,7 +136,7 @@ export default function Quiz ({totalQuotes, quizLength}) {
         &quot;{
           function (){
             // can add loading icons in the future
-            let currQuote = currentQuote || "Quote incoming...";
+            let currQuote = currentQuote || "Loading your next challenge...";
             return `${currQuote}`;
           }()
         }&quot;
@@ -152,9 +152,9 @@ export default function Quiz ({totalQuotes, quizLength}) {
         } else if(submissionMade && !gameOver) {
           return <ResultScreen animeChoice={finalChoice} correctAnime={correctAnime} handleNextButton={handleNextButton} loggedIn={isAuthenticated}/>
         } else if (currentChoices && currentQuote) {
-          return <div className="prompt">What anime is this from?</div>
+          return <div className="prompt">Which anime is this quote from?</div>
         } else if (currentQuote && !currentChoices) {
-          return "Choices incoming..."
+          return "Preparing your options..."
         }
       }()}
       <div className="choices-container">
