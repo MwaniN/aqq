@@ -67,13 +67,6 @@ export default function Result ({animeChoice, correctAnime, handleNextButton, lo
 
   return <div>
     {selectedMessage + " " + selectedEncouragement}
-    {/* {
-      function(){
-        if (loggedIn) {
-          return <button type="button">Add Quote to favorites</button>
-        }
-      }()
-    } */}
     <button type="button" className="advance-button" onClick={() => handleNextButton()}>Next</button>
   </div>
 }
