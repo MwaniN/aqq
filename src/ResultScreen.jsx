@@ -39,10 +39,10 @@ export default function Result ({animeChoice, correctAnime, handleNextButton, lo
     "You're getting the hang of this!",
     "That was a tough one!",
     "Nice work!",
-    "You went full Super Saiyan!",
-    "You are a regular savant.",
-    "Good job.",
-    "Nice."
+    "Excellent!",
+    "Well done!",
+    "Perfect!",
+    "Outstanding!"
   ];
 
   // Failure encouragement messages
