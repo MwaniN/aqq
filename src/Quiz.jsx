@@ -129,11 +129,11 @@ export default function Quiz ({totalQuotes, quizLength}) {
         <div className="progress-bar">
           <div 
             className="progress-fill" 
-            style={{ width: `${(currentQuoteNum / totalQuotes) * 100}%` }}
+            style={{ width: `${gameOver ? 100 : ((currentQuoteNum - 1) / totalQuotes) * 100}%` }}
           ></div>
         </div>
         <div className="progress-text">
-          {Math.round((currentQuoteNum / totalQuotes) * 100)}%
+          {gameOver ? 100 : Math.round(((currentQuoteNum - 1) / totalQuotes) * 100)}%
         </div>
       </div>
       <div className="hud-item">
