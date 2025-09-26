@@ -125,6 +125,17 @@ export default function Quiz ({totalQuotes, quizLength}) {
       <div className="hud-item">
         Quote {currentQuoteNum}/{totalQuotes}
       </div>
+      <div className="hud-item progress-container">
+        <div className="progress-bar">
+          <div 
+            className="progress-fill" 
+            style={{ width: `${(currentQuoteNum / totalQuotes) * 100}%` }}
+          ></div>
+        </div>
+        <div className="progress-text">
+          {Math.round((currentQuoteNum / totalQuotes) * 100)}%
+        </div>
+      </div>
       <div className="hud-item">
         Score: {currentScore}
       </div>
