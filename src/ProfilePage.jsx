@@ -9,7 +9,7 @@ export default function ProfilePage() {
 
   // Show loading state while checking authentication
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div>Almost ready to test your knowledge...</div>
   }
 
   // Show not logged in message only after auth check is complete
