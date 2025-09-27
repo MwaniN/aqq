@@ -10,10 +10,9 @@ export function APICalls (setQuote, setCorrectAnime, setChoices) {
    setQuote(response.data.content);
    setCorrectAnime(response.data.anime.name);
 
-   // update the following call to prevent duplicated names
-   // could be handled on the backend passing in the name retrieved in the first call
-
-   axios.get(`http://localhost:3000/random4Anime`
+   // Pass the correct anime name to exclude it from random choices
+   const correctAnimeName = response.data.anime.name;
+   axios.get(`http://localhost:3000/random4Anime?exclude=${encodeURIComponent(correctAnimeName)}`
    ).then( function (response) {
     
      setChoices(response.data)
